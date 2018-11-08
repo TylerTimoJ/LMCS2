@@ -8,4 +8,3 @@ C:\Users\tyler\source\repos\LED Matrix Control 2\LED Matrix Control 2\obj\Debug\
 C:\Users\tyler\source\repos\LED Matrix Control 2\LED Matrix Control 2\obj\Debug\LED Matrix Control 2.exe
 C:\Users\tyler\source\repos\LED Matrix Control 2\LED Matrix Control 2\obj\Debug\LED Matrix Control 2.pdb
 C:\Users\tyler\source\repos\LED Matrix Control 2\LED Matrix Control 2\obj\Debug\LED_Matrix_Control_2.MainForm.resources
-C:\Users\tyler\source\repos\LED Matrix Control 2\LED Matrix Control 2\bin\Debug\Accord.dll.config
