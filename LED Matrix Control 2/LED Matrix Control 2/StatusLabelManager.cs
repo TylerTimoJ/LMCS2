@@ -11,16 +11,11 @@ namespace LED_Matrix_Control_2
     {
         MainForm form;
 
-        int?[] previousFPS = new int?[60];
 
 
         public StatusLabelManager()
         {
-            form = (MainForm)Application.OpenForms[0];
-            for (int i = 0; i < 60; i++)
-            {
-                previousFPS[i] = 30;
-            }
+
         }
 
 
