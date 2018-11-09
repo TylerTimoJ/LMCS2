@@ -27,11 +27,16 @@ namespace LED_Matrix_Control_2
         public imType ImgType;
         public bool anyImageLoaded = false;
 
-        
+        BackgroundWorker gifLoader;
+
+
         public ImageProcessor()
         {
             form = (MainForm)Application.OpenForms[0];
             bp = new BitmapProcessor();
+            gifLoader = new BackgroundWorker();
+            gifLoader.DoWork += LoadGifAsync;
+            gifLoader.RunWorkerCompleted += LoadGifAsyncComplete;
         }
 
 
@@ -44,26 +49,48 @@ namespace LED_Matrix_Control_2
             anyImageLoaded = true;
         }
 
+        void LoadGifAsync(object sender, DoWorkEventArgs e)
+        {
+            GifLoadParameters data = e.Argument as GifLoadParameters;
+
+            using (Image gifImg = Image.FromFile(data.path))
+            {
+                FrameDimension fd = new FrameDimension(gifImg.FrameDimensionsList[0]);
+                int FrameCount = gifImg.GetFrameCount(fd);
+                
+                Bitmap[] workingBitm = new Bitmap[FrameCount];
+
+                //  Debug.WriteLine("frames in gif: " + FrameCount);
+                for (int i = 0; i < FrameCount; i++)
+                {
+                    gifImg.SelectActiveFrame(fd, i);
+                    workingBitm[i] = (Bitmap)gifImg.Clone();
+                }
+                data.workingBitmaps = workingBitm;
+                e.Result = data;
+            }
+        }
+
+        void LoadGifAsyncComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            GifLoadParameters data = e.Result as GifLoadParameters;
+            workingBitmaps = data.workingBitmaps;
+            previewBitmaps = new Bitmap[workingBitmaps.Length];
+            ImgType = imType.gif;
+            anyImageLoaded = true;
+            form.LoadGifComplete();
+        }
+
 
         public void LoadGifFromDisk(string path)
         {
             DisposeGarbage();
-            using (Image gifImg = Image.FromFile(path))
-            {
-                FrameDimension fd = new FrameDimension(gifImg.FrameDimensionsList[0]);
-                int FrameCount = gifImg.GetFrameCount(fd);
-                previewBitmaps = new Bitmap[FrameCount];
-                workingBitmaps = new Bitmap[FrameCount];
 
-              //  Debug.WriteLine("frames in gif: " + FrameCount);
-                for (int i = 0; i < FrameCount; i++)
-                {
-                    gifImg.SelectActiveFrame(fd, i);
-                    workingBitmaps[i] = (Bitmap)gifImg.Clone();
-                }
-            }
-            ImgType = imType.gif;
-            anyImageLoaded = true;
+            GifLoadParameters data = new GifLoadParameters();
+            data.path = path;
+
+            gifLoader.RunWorkerAsync(data);
+
         }
 
 
@@ -105,11 +132,5 @@ namespace LED_Matrix_Control_2
             ImgType = imType.screen;
             anyImageLoaded = true;
         }
-
-        
-
-        
-
-
     }
 }

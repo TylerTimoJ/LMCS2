@@ -62,6 +62,7 @@ namespace LED_Matrix_Control_2
 
 
             //load pixel order settings
+            if(Properties.Settings.Default.PixelOrder != null)
             if (Properties.Settings.Default.PixelOrder.Length == pixlx * pixly)
             {
                 sm.byteOrder = Properties.Settings.Default.PixelOrder; //set serialmanager byte order with saved config
@@ -169,6 +170,10 @@ namespace LED_Matrix_Control_2
             StopAnimationTick(); //stop previous animation
 
             im.LoadGifFromDisk(OpenFile.FileName); //load gif from file and split frames into bitmaps
+        }
+
+        public void LoadGifComplete()
+        {
             im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate preivew bitmaps
 
             SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of loaded image
@@ -232,7 +237,6 @@ namespace LED_Matrix_Control_2
 
         private void animTimer_Tick(object sender, EventArgs e)
         {
-            Debug.WriteLine(animIndex);
             sm.SendFrame(im.imageFrames[animIndex]); //send frame at animation index;
 
             //update display at animation index;
@@ -487,13 +491,6 @@ namespace LED_Matrix_Control_2
         private void showMatrixPreview_CheckedChanged(object sender, EventArgs e)
         {
             showPreview = matrixContainer.Enabled = showMatrixPreview.Checked;
-
-        }
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //   am.Start();
         }
 
 
@@ -533,6 +530,7 @@ namespace LED_Matrix_Control_2
             animationMode = animationPlayMode.Text;
         }
 
+
         private void buildBoxes_Click(object sender, EventArgs e)
         {
             pixlx = (int)pixlsXUpDown.Value;
@@ -543,6 +541,7 @@ namespace LED_Matrix_Control_2
             pb.CreateBoxes(pixlx, pixly);
             //Debug.WriteLine(Application.OpenForms[0].Width);
         }
+
 
         InterpolationMode selectMode()
         {

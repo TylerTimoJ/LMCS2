@@ -94,15 +94,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.imageSelectButton = new System.Windows.Forms.Button();
             this.tab4Audio = new System.Windows.Forms.TabPage();
-            this.progressBar8 = new System.Windows.Forms.ProgressBar();
-            this.progressBar7 = new System.Windows.Forms.ProgressBar();
-            this.progressBar6 = new System.Windows.Forms.ProgressBar();
-            this.progressBar5 = new System.Windows.Forms.ProgressBar();
-            this.progressBar4 = new System.Windows.Forms.ProgressBar();
-            this.progressBar3 = new System.Windows.Forms.ProgressBar();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.animTimer = new System.Windows.Forms.Timer(this.components);
             this.screenCapTimer = new System.Windows.Forms.Timer(this.components);
@@ -136,7 +127,6 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).BeginInit();
             this.groupBox3.SuspendLayout();
-            this.tab4Audio.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectToCOMPort
@@ -921,95 +911,12 @@
             // 
             // tab4Audio
             // 
-            this.tab4Audio.Controls.Add(this.progressBar8);
-            this.tab4Audio.Controls.Add(this.progressBar7);
-            this.tab4Audio.Controls.Add(this.progressBar6);
-            this.tab4Audio.Controls.Add(this.progressBar5);
-            this.tab4Audio.Controls.Add(this.progressBar4);
-            this.tab4Audio.Controls.Add(this.progressBar3);
-            this.tab4Audio.Controls.Add(this.progressBar2);
-            this.tab4Audio.Controls.Add(this.progressBar1);
-            this.tab4Audio.Controls.Add(this.button1);
             this.tab4Audio.Location = new System.Drawing.Point(4, 22);
             this.tab4Audio.Name = "tab4Audio";
             this.tab4Audio.Size = new System.Drawing.Size(504, 623);
             this.tab4Audio.TabIndex = 3;
             this.tab4Audio.Text = "Audio";
             this.tab4Audio.UseVisualStyleBackColor = true;
-            // 
-            // progressBar8
-            // 
-            this.progressBar8.Location = new System.Drawing.Point(3, 206);
-            this.progressBar8.MarqueeAnimationSpeed = 1;
-            this.progressBar8.Name = "progressBar8";
-            this.progressBar8.Size = new System.Drawing.Size(238, 23);
-            this.progressBar8.TabIndex = 8;
-            // 
-            // progressBar7
-            // 
-            this.progressBar7.Location = new System.Drawing.Point(3, 177);
-            this.progressBar7.MarqueeAnimationSpeed = 1;
-            this.progressBar7.Name = "progressBar7";
-            this.progressBar7.Size = new System.Drawing.Size(238, 23);
-            this.progressBar7.TabIndex = 7;
-            // 
-            // progressBar6
-            // 
-            this.progressBar6.Location = new System.Drawing.Point(3, 148);
-            this.progressBar6.MarqueeAnimationSpeed = 1;
-            this.progressBar6.Name = "progressBar6";
-            this.progressBar6.Size = new System.Drawing.Size(238, 23);
-            this.progressBar6.TabIndex = 6;
-            // 
-            // progressBar5
-            // 
-            this.progressBar5.Location = new System.Drawing.Point(2, 119);
-            this.progressBar5.MarqueeAnimationSpeed = 1;
-            this.progressBar5.Name = "progressBar5";
-            this.progressBar5.Size = new System.Drawing.Size(238, 23);
-            this.progressBar5.TabIndex = 5;
-            // 
-            // progressBar4
-            // 
-            this.progressBar4.Location = new System.Drawing.Point(3, 90);
-            this.progressBar4.MarqueeAnimationSpeed = 1;
-            this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(238, 23);
-            this.progressBar4.TabIndex = 4;
-            // 
-            // progressBar3
-            // 
-            this.progressBar3.Location = new System.Drawing.Point(3, 61);
-            this.progressBar3.MarqueeAnimationSpeed = 1;
-            this.progressBar3.Name = "progressBar3";
-            this.progressBar3.Size = new System.Drawing.Size(238, 23);
-            this.progressBar3.TabIndex = 3;
-            // 
-            // progressBar2
-            // 
-            this.progressBar2.Location = new System.Drawing.Point(3, 32);
-            this.progressBar2.MarqueeAnimationSpeed = 1;
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(238, 23);
-            this.progressBar2.TabIndex = 2;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(3, 3);
-            this.progressBar1.MarqueeAnimationSpeed = 1;
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(238, 23);
-            this.progressBar1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(336, 132);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // OpenFile
             // 
@@ -1086,7 +993,6 @@
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            this.tab4Audio.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1157,15 +1063,6 @@
         private System.Windows.Forms.CheckBox showMatrixPreview;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.TabPage tab4Audio;
-        private System.Windows.Forms.Button button1;
-        public System.Windows.Forms.ProgressBar progressBar8;
-        public System.Windows.Forms.ProgressBar progressBar7;
-        public System.Windows.Forms.ProgressBar progressBar6;
-        public System.Windows.Forms.ProgressBar progressBar5;
-        public System.Windows.Forms.ProgressBar progressBar4;
-        public System.Windows.Forms.ProgressBar progressBar3;
-        public System.Windows.Forms.ProgressBar progressBar2;
-        public System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button editPixelOrder;
