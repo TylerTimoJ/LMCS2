@@ -11,86 +11,100 @@ namespace LED_Matrix_Control_2
 {
     public partial class MainForm : Form
     {
-
+        //create variables for each class
         BitmapProcessor bp;
         public SerialManager sm;
         PictureBoxBuilder pb;
         ImageProcessor im;
         StatusLabelManager slm;
-       // AudioManager am;
 
+
+        //initialize local variables
         public int pixlx = 16, pixly = 16;
         int scaleWidth, scaleHeight;
         int animIndex = 0;
-
+        string animationMode = "Loop";
+        string selectedInterpMode = "Nearest Neighbor";
         bool showPreview = true;
-
         Rectangle dimensions;
 
-        public MainForm() { InitializeComponent(); }
+
+        public MainForm()
+        {
+            InitializeComponent();
+        }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pixlsXUpDown.Value = pixlx = Properties.Settings.Default.pixelsX; //load matrix width and height
+            pixlsYUpDown.Value = pixly = Properties.Settings.Default.pixelsY;
+
+            //create class objects
             bp = new BitmapProcessor();
             sm = new SerialManager();
-            pb = new PictureBoxBuilder();
+            pb = new PictureBoxBuilder(pixlx, pixly);
             im = new ImageProcessor();
             slm = new StatusLabelManager();
-         //   am = new AudioManager();
-            //list COM Ports
-            PortListToComboBox();
-            //load matrix dimensions
-            pixlsXUpDown.Value = pixlx = Properties.Settings.Default.pixelsX;
-            pixlsYUpDown.Value = pixly = Properties.Settings.Default.pixelsY;
-            //draw matrix
-            pb.CreateBoxes(pixlx, pixly);
-            //setupinterpolationMode & anim mode
-            InterpolationModeDropDown1.Text = InterpolationModeDropDown1.Items[0].ToString();
-            animationPlayMode.Text = animationPlayMode.Items[0].ToString();
-            //load white balance settings
 
+
+            PortListToComboBox(); //list COM Ports
+
+            pb.CreateBoxes(pixlx, pixly); //create matrix pictureboxes with loaded width and height
+
+            InterpolationModeDropDown1.Text = InterpolationModeDropDown1.Items[0].ToString(); //setup interpolationMode & anim mode
+            animationPlayMode.Text = animationPlayMode.Items[0].ToString();
+
+            //load white balance settings
             redWB.Value = Properties.Settings.Default.wbRed;
             greenWB.Value = Properties.Settings.Default.wbGreen;
             blueWB.Value = Properties.Settings.Default.wbBlue;
 
-            //load pixel order settings
-            sm.byteOrder = Properties.Settings.Default.PixelOrder;
 
-            //load Screens
-            foreach(Screen sc in Screen.AllScreens)
+            //load pixel order settings
+            if (Properties.Settings.Default.PixelOrder.Length == pixlx * pixly)
+            {
+                sm.byteOrder = Properties.Settings.Default.PixelOrder; //set serialmanager byte order with saved config
+                slm.PixelOrderStatus(true); //update label
+            }
+            else
+            {
+                slm.PixelOrderStatus(false); //update label
+            }
+
+
+            //load Screens to dropdown
+            foreach (Screen sc in Screen.AllScreens)
             {
                 screenSelection.Items.Add(sc.DeviceName);
             }
             screenSelection.Text = Screen.AllScreens[0].DeviceName;
-            
-
         }
 
+        //connect to which ever COM port is selected in drop down
+        private void connectToCOMPort_Click(object sender, EventArgs e)
+        {
+            sm.ConnectToCOMPort(portsList.Text.Split(' ')[0]); //try to connect to COM port
+            slm.ConnectionStatus(true, portsList.Text.Split(' ')[0]); //update label
+        }
 
-        private void connectToCOMPort_Click(object sender, EventArgs e) { sm.ConnectToCOMPort(portsList.Text.Split(' ')[0]); }
+        //send clear frame message over serial
+        private void clearFrame_Click(object sender, EventArgs e)
+        {
+            sm.ClearFrame();
+            pb.ClearFrame();
+        }
 
-        private void clearFrame_Click(object sender, EventArgs e) { sm.ClearFrame(); pb.ClearFrame(); }
-
+        //disconnect from port and stop
         private void disconnectFromCOMPort_Click(object sender, EventArgs e)
         {
             sm.DisconnectCOMPort();
             StopAnimationTick();
+            slm.ConnectionStatus(false); //update label
         }
 
-
+        //list each COM port in combobox
         private void PortListToComboBox()
-        {
-            portsList.Items.Clear();
-            foreach (string port in sm.ListCOMPorts())
-            {
-                portsList.Items.Add(port);
-                portsList.Text = port;
-            }
-        }
-
-
-        private void refreshCOMPorts_Click(object sender, EventArgs e)
         {
             portsList.Items.Clear();
             foreach (string port in sm.ListCOMPorts())
@@ -101,13 +115,20 @@ namespace LED_Matrix_Control_2
                 portsList.Text = portsList.Items[0].ToString();
         }
 
+        // refresh list
+        private void refreshCOMPorts_Click(object sender, EventArgs e)
+        {
+            PortListToComboBox();
+        }
 
+        //open image
         private void stillImageSelectButton_Click(object sender, EventArgs e)
         {
-            if (OpenFile.ShowDialog() == DialogResult.OK)
+            if (OpenFile.ShowDialog() == DialogResult.OK) //if image was selected
             {
-                lockSizeToggle.Checked = false;
-                StopAnimationTick();
+                lockSizeToggle.Checked = false; // unlock the scale lock
+                StopAnimationTick(); //stop any previously running animation
+
                 if (Path.GetExtension(OpenFile.FileName) == ".gif")
                 {
                     LoadGifFromDisk();
@@ -122,176 +143,168 @@ namespace LED_Matrix_Control_2
 
         void LoadStillFromDisk()
         {
-            animationGroup.Enabled = false;
-            im.LoadStillFromDisk(OpenFile.FileName);
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height);
+            animationGroup.Enabled = false; //disable animation control
+            im.LoadStillFromDisk(OpenFile.FileName); //load image with image processor
+            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate the bitmaps for the preivew picturebox
 
-            SetScaleControls();
-            RefreshStill();
-            UpdateImagePreview();
+            SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of loaded image
+            RefreshStill(); //send image to display
+            UpdateImagePreview(); //update preview with scaled bitmap
         }
 
 
         void RefreshStill()
         {
-            im.DownSampleImages(pixlx, pixly, selectMode(), dimensions);
+            im.DownSampleImages(pixlx, pixly, selectMode(), dimensions); //load image data to the imageFrames vaiable in image processor
 
-            sm.SendFrame(im.imageFrames[0]);
+            sm.SendFrame(im.imageFrames[0]); //send frame data
             if (showPreview)
-                pb.FrameToBoxes(im.imageFrames[0]);
+                pb.FrameToBoxes(im.imageFrames[0]); //update matrix preview
         }
 
 
         public void LoadGifFromDisk()
         {
-            animationGroup.Enabled = true;
-            StopAnimationTick();
+            animationGroup.Enabled = true; //enable animation controls
+            StopAnimationTick(); //stop previous animation
 
-            im.LoadGifFromDisk(OpenFile.FileName);
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height);
+            im.LoadGifFromDisk(OpenFile.FileName); //load gif from file and split frames into bitmaps
+            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate preivew bitmaps
 
-            SetScaleControls();
-            RefreshGif();
-            UpdateImagePreview();
+            SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of loaded image
+            RefreshGif(); //downsample gif bitmaps and load into image processor's imageFrames array
+            UpdateImagePreview(); //update preview with scaled bitmap
         }
 
 
+        //downsample gif bitmaps and load into image processor's imageFrames array
         public void RefreshGif()
         {
             im.DownSampleImages(pixlx, pixly, selectMode(), dimensions);
 
-            SendGif();
-        }
-
-
-        void SendGif()
-        {
-
-            sm.SendFrame(im.imageFrames[0]);
+            sm.SendFrame(im.imageFrames[animIndex]);
             if (showPreview)
-                pb.FrameToBoxes(im.imageFrames[0]);
-
-
+                pb.FrameToBoxes(im.imageFrames[animIndex]);
         }
 
 
         void SetupScreenCapture()
         {
-            //add support for multiple monitors
+            //to do: add support for multiple monitors
 
-            im.CaptureScreen(Screen.AllScreens[0].Bounds);
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height);
+            im.CaptureScreen(Screen.AllScreens[0].Bounds); //capture snapshot of the whole screen
+            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate a preview bitmap of the entire screen
 
-            SetScaleControls();
-
-            CaptureScreen();
-
-            UpdateImagePreview();
+            SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of screen
+            CaptureScreen(); //capture screen with set scale dimensions
+            UpdateImagePreview(); //update preview with scaled bitmap
         }
 
 
         void CaptureScreen()
         {
 
-            Rectangle screenCaptureArea = new Rectangle((int)scaleStartX.Value, (int)scaleStartY.Value, (int)(scaleEndX.Value - scaleStartX.Value), (int)(scaleEndY.Value - scaleStartY.Value));
-            Rectangle screenDimensionSize = new Rectangle(0, 0, screenCaptureArea.Width, screenCaptureArea.Height);
+            Rectangle screenCaptureArea = new Rectangle((int)scaleStartX.Value, (int)scaleStartY.Value, (int)(scaleEndX.Value - scaleStartX.Value), (int)(scaleEndY.Value - scaleStartY.Value)); //get area to capture based on scale settings
+            Rectangle screenDimensionSize = new Rectangle(0, 0, screenCaptureArea.Width, screenCaptureArea.Height); //set area of screen to capture
 
-            im.CaptureScreen(screenCaptureArea);
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height);
+            im.CaptureScreen(screenCaptureArea); //capture snapshot of screen and store it in image processor's varaibles
+            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate a preview bitmap of selected area of screen
 
-            im.DownSampleImages(pixlx, pixly, selectMode(), screenDimensionSize);
+            im.DownSampleImages(pixlx, pixly, selectMode(), screenDimensionSize); //load screen snapshot into image processor's imageFrames array
 
-            sm.SendFrame(im.imageFrames[0]);
-            pb.FrameToBoxes(im.imageFrames[0]);
-            UpdateImagePreview();
+            sm.SendFrame(im.imageFrames[0]); //send frame data
+            pb.FrameToBoxes(im.imageFrames[0]); //update matrix preview
+            UpdateImagePreview(); //update preview picturebox
         }
 
-
+        //update the scale controls to fit whatever image is loaded
         void SetScaleControls()
         {
-            scaleStartX.Value = scaleStartY.Value = 0;
-            scaleStartX.Maximum = im.workingBitmaps[0].Width - pixlx;
-            scaleStartY.Maximum = im.workingBitmaps[0].Height - pixly;
-            scaleEndXUD.Value = scaleEndX.Value = scaleEndX.Maximum = im.workingBitmaps[0].Width;
-            scaleEndYUD.Value = scaleEndY.Value = scaleEndY.Maximum = im.workingBitmaps[0].Height;
-            scaleSettingGroup.Enabled = true;
+            scaleStartX.Value = scaleStartY.Value = 0; //reset starting values
+            scaleStartX.Maximum = im.workingBitmaps[0].Width - pixlx; //set maximum to the number of pixels in loaded image minus the number of horizontal pixels of matrix
+            scaleStartY.Maximum = im.workingBitmaps[0].Height - pixly; //set maximum to the number of pixels in loaded image minus the number of vertical pixels of matrix
+            scaleEndXUD.Value = scaleEndXUD.Maximum = scaleEndX.Value = scaleEndX.Maximum = im.workingBitmaps[0].Width; //make sure user can't exceed the horizontal dimensions of image
+            scaleEndYUD.Value = scaleEndYUD.Maximum = scaleEndY.Value = scaleEndY.Maximum = im.workingBitmaps[0].Height; //make sure user can't exceed the vertical dimensions of image
+            scaleSettingGroup.Enabled = true; //enable controls after maximums have been set
         }
 
-        bool animPlayingForward;
+        bool animPlayingForward = true; //used for the bounce mode
+
         private void animTimer_Tick(object sender, EventArgs e)
         {
-            sm.SendFrame(im.imageFrames[animIndex]);
+            Debug.WriteLine(animIndex);
+            sm.SendFrame(im.imageFrames[animIndex]); //send frame at animation index;
 
+            //update display at animation index;
             if (showPreview)
             {
                 pb.FrameToBoxes(im.imageFrames[animIndex]);
                 UpdateImagePreview();
             }
-            switch (animationPlayMode.Text)
+
+            switch (animationMode) //switch based on selected mode
             {
+                //play through each frame forwards
                 case "Loop":
                     {
-                        if (animIndex < im.imageFrames.Length - 1)
-                            animIndex++;
-                        else
+                        animIndex++;
+                        if (animIndex >= im.imageFrames.Length)
                             animIndex = 0;
+                        animPlayingForward = true;
                         break;
                     }
+                //play forward then backward
                 case "Bounce":
                     {
                         if (animPlayingForward)
                         {
-                            if (animIndex < im.imageFrames.Length - 1)
-                            {
-                                animIndex++;
-                            }
-                            else
-                            {
-                                animIndex = im.imageFrames.Length - 1;
+                            animIndex++;
+                            if (animIndex >= im.imageFrames.Length - 1)
                                 animPlayingForward = false;
-                            }
                         }
                         else
                         {
-                            if (animIndex > 0)
-                            {
-                                animIndex--;
-                            }
-                            else
-                            {
-                                animIndex = 0;
+                            animIndex--;
+                            if (animIndex <= 0)
                                 animPlayingForward = true;
-                            }
                         }
                         break;
                     }
+                //opposite of Loop mode
                 case "Reverse":
                     {
-                        if (animIndex > 0)
-                            animIndex--;
-                        else
+                        animIndex--;
+                        if (animIndex < 0)
                             animIndex = im.imageFrames.Length - 1;
+
+                        animPlayingForward = false;
                         break;
                     }
             }
         }
 
+        //stop animation from playing
         void StopAnimationTick()
         {
-            animTimer.Stop();
-            animIndex = 0;
+            animTimer.Stop(); //stop timer
+            animIndex = 0; //reset index
+            animPlayingForward = true; //set animation to play forward
         }
+
+
+        private void ChooseRefreshEvent(object sender, EventArgs e)
+        {
+            ChooseRefresh();
+        }
+
 
         private void InterpolationModeDropDown1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            selectedInterpMode = InterpolationModeDropDown1.Text;
             ChooseRefresh();
         }
 
-        private void setScaleButton_Click(object sender, EventArgs e)
-        {
-            ChooseRefresh();
-        }
-
+        //refresh images
         void ChooseRefresh()
         {
             if (im.anyImageLoaded)
@@ -304,6 +317,7 @@ namespace LED_Matrix_Control_2
                     CaptureScreen();
             }
         }
+
 
         private void scaleStartXUpDown_ValueChanged(object sender, EventArgs e)
         {
@@ -371,12 +385,11 @@ namespace LED_Matrix_Control_2
             UpdateImagePreview();
         }
 
+
         void UpdateImagePreview()
         {
-            if (im.ImgType != ImageProcessor.imType.screen && showPreview)
+            if (im.ImgType != ImageProcessor.imType.screen && showPreview && im.anyImageLoaded) //if image is loaded and show preview is true and the screen cap is not lo
             {
-                if (im.anyImageLoaded)
-                {
                     Bitmap paintedBitmap = im.previewBitmaps[animIndex].Clone(new Rectangle(0, 0, im.previewBitmaps[0].Width, im.previewBitmaps[0].Height), PixelFormat.DontCare);
                     using (Graphics g = Graphics.FromImage(paintedBitmap))
                     {
@@ -388,13 +401,11 @@ namespace LED_Matrix_Control_2
                         g.DrawRectangle(new Pen(Brushes.HotPink, 1), new Rectangle(startPosX, startPosY, endPosX - startPosX - 1, endPosY - startPosY - 1));
                     }
                     imagePictureBox.Image = paintedBitmap;
-                }
             }
             else
-            {
                 imagePictureBox.Image = im.previewBitmaps[0];
-            }
         }
+
 
         private void resetScaleButton_Click(object sender, EventArgs e)
         {
@@ -411,21 +422,25 @@ namespace LED_Matrix_Control_2
 
         }
 
+
         private void startAnimation_Click(object sender, EventArgs e)
         {
             if (im.ImgType == ImageProcessor.imType.gif)
                 animTimer.Start();
         }
 
+
         private void stopAnimation_Click(object sender, EventArgs e)
         {
             animTimer.Stop();
         }
 
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             animTimer.Interval = 1000 / (int)numericUpDown1.Value;
         }
+
 
         private void WBValueChanged(object sender, EventArgs e)
         {
@@ -444,22 +459,18 @@ namespace LED_Matrix_Control_2
             Properties.Settings.Default.Save();
         }
 
+
         private void screenCapTimer_Tick(object sender, EventArgs e)
         {
-
-
-
-            //StopAnimationTick();
             CaptureScreen();
-
         }
+
 
         private void startScreenCap_Click(object sender, EventArgs e)
         {
             SetupScreenCapture();
             screenCapTimer.Start();
         }
-
 
 
         private void lockSizeToggle_CheckedChanged(object sender, EventArgs e)
@@ -472,21 +483,25 @@ namespace LED_Matrix_Control_2
             }
         }
 
+
         private void showMatrixPreview_CheckedChanged(object sender, EventArgs e)
         {
             showPreview = matrixContainer.Enabled = showMatrixPreview.Checked;
 
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
-         //   am.Start();
+            //   am.Start();
         }
+
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+
         }
+
 
         private void editPixelOrder_Click(object sender, EventArgs e)
         {
@@ -494,19 +509,28 @@ namespace LED_Matrix_Control_2
             resetPixelOrder.Enabled = savePixelOrder.Enabled = true;
         }
 
+
         private void savePixelOrder_Click(object sender, EventArgs e)
         {
             pb.SaveOrder();
         }
+
 
         private void resetPixelOrder_Click(object sender, EventArgs e)
         {
             pb.ResetOrder();
         }
 
+
         private void stopScreenCap_Click(object sender, EventArgs e)
         {
             screenCapTimer.Stop();
+        }
+
+
+        private void animationPlayMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            animationMode = animationPlayMode.Text;
         }
 
         private void buildBoxes_Click(object sender, EventArgs e)
@@ -523,7 +547,7 @@ namespace LED_Matrix_Control_2
         InterpolationMode selectMode()
         {
             InterpolationMode interpMode;
-            switch (InterpolationModeDropDown1.Text)
+            switch (selectedInterpMode)
             {
                 case "Low":
                     interpMode = InterpolationMode.Low;

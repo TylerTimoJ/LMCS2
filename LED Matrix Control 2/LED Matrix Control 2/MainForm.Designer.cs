@@ -607,7 +607,7 @@
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(145, 48);
             this.numericUpDown1.Maximum = new decimal(new int[] {
-            60,
+            120,
             0,
             0,
             0});
@@ -638,6 +638,7 @@
             this.animationPlayMode.Name = "animationPlayMode";
             this.animationPlayMode.Size = new System.Drawing.Size(60, 21);
             this.animationPlayMode.TabIndex = 4;
+            this.animationPlayMode.SelectedIndexChanged += new System.EventHandler(this.animationPlayMode_SelectedIndexChanged);
             // 
             // stopAnimation
             // 
@@ -786,7 +787,7 @@
             this.setScaleButton.TabIndex = 17;
             this.setScaleButton.Text = "Set";
             this.setScaleButton.UseVisualStyleBackColor = true;
-            this.setScaleButton.Click += new System.EventHandler(this.setScaleButton_Click);
+            this.setScaleButton.Click += new System.EventHandler(this.ChooseRefreshEvent);
             // 
             // scaleEndY
             // 

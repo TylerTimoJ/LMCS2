@@ -18,10 +18,20 @@ namespace LED_Matrix_Control_2
 {
     public class PictureBoxBuilder
     {
+
+        public PictureBoxBuilder(int width, int height)
+        {
+            loadedWidth = width;
+            loadedHeight = height;
+        }
+
         MainForm form;
         PictureBox[,] boxes;
+
         int[][] newOrder;
         int loadedWidth, loadedHeight;
+
+        int drawIndex = 0;
 
         public void CreateBoxes(int width, int height)
         {
@@ -61,13 +71,7 @@ namespace LED_Matrix_Control_2
                         Tag = index.ToString()
 
                     };
-
-
                     form.matrixContainer.Controls.Add(boxes[x, y]);
-
-
-
-
                     index++;
                 }
             }
@@ -111,26 +115,11 @@ namespace LED_Matrix_Control_2
         public void Edit()
         {
             newOrder = new int[loadedWidth * loadedHeight][];
-            int index = 0;
+
             for (int y = 0; y < loadedHeight; y++)
             {
                 for (int x = 0; x < loadedWidth; x++)
                 {
-                    /*
-                    Bitmap bmp = new Bitmap(32, 32);
-                    RectangleF rectf = new RectangleF(0, 0, 32, 32);
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        g.SmoothingMode = SmoothingMode.AntiAlias;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.DrawString(index.ToString(), new Font("Tahoma", 8), Brushes.LightGray, rectf);
-                        g.Flush();
-                        index++;
-                    }
-                    boxes[x, y].Image = bmp;
-
-    */
                     boxes[x, y].BackColor = Color.FromArgb(255, 63, 63, 63);
 
                     boxes[x, y].MouseMove += pb_MouseMove;
@@ -146,9 +135,7 @@ namespace LED_Matrix_Control_2
             if (e.Button == MouseButtons.Left)
             {
                 var pb = (PictureBox)sender;
-
                 pb.DoDragDrop(pb, DragDropEffects.Move);
-
             }
         }
 
@@ -159,28 +146,22 @@ namespace LED_Matrix_Control_2
 
         private void pb_DragDrop(object sender, DragEventArgs e)
         {
-            var target = (PictureBox)sender;
+            PictureBox target = (PictureBox)sender;
 
-            var source = (PictureBox)e.Data.GetData(typeof(PictureBox));
+            PictureBox source = (PictureBox)e.Data.GetData(typeof(PictureBox));
+
             if (source != target)
             {
-                // You can swap the images out, replace the target image, etc.
                 OrderManager(int.Parse(source.Tag.ToString()), int.Parse(target.Tag.ToString()));
-
-                // source.BackColor = Color.Red;
-                //target.BackColor = Color.Green;
-
-                //Debug.WriteLine("start:"+source.Tag + " end:" + target.Tag);
             }
         }
 
-        int drawIndex = 0;
+        
 
 
         public void OrderManager(int startIndex, int endIndex)
         {
             int totalPixels = loadedWidth * loadedHeight;
-
 
             int startx = startIndex % loadedWidth;
             int starty = startIndex / loadedWidth;
@@ -201,7 +182,6 @@ namespace LED_Matrix_Control_2
                         DrawOnBox(startx, i, totalPixels);
                 }
             }
-
             if (starty == endy)
             {
                 if (endx > startx)
