@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.connectToCOMPort = new System.Windows.Forms.Button();
             this.matrixContainer = new System.Windows.Forms.Panel();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.ModeTabControl = new System.Windows.Forms.TabControl();
             this.tab1Settings = new System.Windows.Forms.TabPage();
             this.clearButton1 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -98,7 +98,12 @@
             this.animTimer = new System.Windows.Forms.Timer(this.components);
             this.screenCapTimer = new System.Windows.Forms.Timer(this.components);
             this.statusBar = new System.Windows.Forms.Label();
-            this.tabControl1.SuspendLayout();
+            this.drawColorPicker = new System.Windows.Forms.ColorDialog();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.drawColorPreview = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ModeTabControl.SuspendLayout();
             this.tab1Settings.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
@@ -110,6 +115,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.blueWB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenWB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redWB)).BeginInit();
+            this.tab2Draw.SuspendLayout();
             this.tab3Image.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -127,6 +133,8 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // connectToCOMPort
@@ -144,30 +152,33 @@
             this.matrixContainer.AutoSize = true;
             this.matrixContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.matrixContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.matrixContainer.Cursor = System.Windows.Forms.Cursors.Default;
             this.matrixContainer.Location = new System.Drawing.Point(517, 6);
             this.matrixContainer.Margin = new System.Windows.Forms.Padding(0);
             this.matrixContainer.MinimumSize = new System.Drawing.Size(10, 646);
             this.matrixContainer.Name = "matrixContainer";
             this.matrixContainer.Size = new System.Drawing.Size(10, 646);
             this.matrixContainer.TabIndex = 4;
+            this.matrixContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawMouseMove);
+            this.matrixContainer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawMouseMove);
             // 
-            // tabControl1
+            // ModeTabControl
             // 
-            this.tabControl1.Controls.Add(this.tab1Settings);
-            this.tabControl1.Controls.Add(this.tab2Draw);
-            this.tabControl1.Controls.Add(this.tab3Image);
-            this.tabControl1.Controls.Add(this.tab4Audio);
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.Padding = new System.Drawing.Point(3, 3);
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(512, 649);
-            this.tabControl1.TabIndex = 5;
+            this.ModeTabControl.Controls.Add(this.tab1Settings);
+            this.ModeTabControl.Controls.Add(this.tab2Draw);
+            this.ModeTabControl.Controls.Add(this.tab3Image);
+            this.ModeTabControl.Controls.Add(this.tab4Audio);
+            this.ModeTabControl.Location = new System.Drawing.Point(3, 3);
+            this.ModeTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.ModeTabControl.Name = "ModeTabControl";
+            this.ModeTabControl.Padding = new System.Drawing.Point(3, 3);
+            this.ModeTabControl.SelectedIndex = 0;
+            this.ModeTabControl.Size = new System.Drawing.Size(512, 649);
+            this.ModeTabControl.TabIndex = 5;
+            this.ModeTabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tab1Settings
             // 
-            this.tab1Settings.Controls.Add(this.clearButton1);
             this.tab1Settings.Controls.Add(this.groupBox8);
             this.tab1Settings.Controls.Add(this.groupBox5);
             this.tab1Settings.Location = new System.Drawing.Point(4, 22);
@@ -180,7 +191,7 @@
             // 
             // clearButton1
             // 
-            this.clearButton1.Location = new System.Drawing.Point(255, 320);
+            this.clearButton1.Location = new System.Drawing.Point(238, 271);
             this.clearButton1.Name = "clearButton1";
             this.clearButton1.Size = new System.Drawing.Size(75, 23);
             this.clearButton1.TabIndex = 7;
@@ -465,6 +476,8 @@
             // 
             // tab2Draw
             // 
+            this.tab2Draw.Controls.Add(this.clearButton1);
+            this.tab2Draw.Controls.Add(this.groupBox10);
             this.tab2Draw.Location = new System.Drawing.Point(4, 22);
             this.tab2Draw.Name = "tab2Draw";
             this.tab2Draw.Padding = new System.Windows.Forms.Padding(3);
@@ -942,6 +955,53 @@
             this.statusBar.TabIndex = 6;
             this.statusBar.Text = "Connected on: COM 6,  FPS: 30,  ";
             // 
+            // drawColorPicker
+            // 
+            this.drawColorPicker.FullOpen = true;
+            this.drawColorPicker.ShowHelp = true;
+            this.drawColorPicker.SolidColorOnly = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Controls.Add(this.button1);
+            this.groupBox10.Controls.Add(this.drawColorPreview);
+            this.groupBox10.Location = new System.Drawing.Point(7, 7);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(480, 183);
+            this.groupBox10.TabIndex = 0;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "groupBox10";
+            // 
+            // drawColorPreview
+            // 
+            this.drawColorPreview.BackColor = System.Drawing.Color.Black;
+            this.drawColorPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.drawColorPreview.Location = new System.Drawing.Point(6, 19);
+            this.drawColorPreview.Name = "drawColorPreview";
+            this.drawColorPreview.Size = new System.Drawing.Size(23, 23);
+            this.drawColorPreview.TabIndex = 0;
+            this.drawColorPreview.TabStop = false;
+            this.drawColorPreview.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(175, 71);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(35, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Draw Color";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -950,7 +1010,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1284, 761);
             this.Controls.Add(this.statusBar);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.ModeTabControl);
             this.Controls.Add(this.matrixContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -959,7 +1019,7 @@
             this.Text = "LED Matrix Control";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tabControl1.ResumeLayout(false);
+            this.ModeTabControl.ResumeLayout(false);
             this.tab1Settings.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
@@ -973,6 +1033,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.blueWB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenWB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redWB)).EndInit();
+            this.tab2Draw.ResumeLayout(false);
             this.tab3Image.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
@@ -993,6 +1054,9 @@
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).EndInit();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1001,7 +1065,7 @@
         #endregion
 
         private System.Windows.Forms.Button connectToCOMPort;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl ModeTabControl;
         private System.Windows.Forms.TabPage tab1Settings;
         private System.Windows.Forms.TabPage tab2Draw;
         private System.Windows.Forms.TabPage tab3Image;
@@ -1069,6 +1133,11 @@
         private System.Windows.Forms.Button savePixelOrder;
         private System.Windows.Forms.Button resetPixelOrder;
         private System.Windows.Forms.Button stopScreenCap;
+        private System.Windows.Forms.ColorDialog drawColorPicker;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox drawColorPreview;
     }
 }
 

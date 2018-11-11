@@ -27,4 +27,13 @@ namespace LED_Matrix_Control_2
         public int fullImageWidth { get; set; }
         public int fullImageHeight { get; set; }
     }
+
+    public class DrawObject
+    {
+        public bool draw { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
+        public byte[] color { get; set; }
+    
+    }
 }

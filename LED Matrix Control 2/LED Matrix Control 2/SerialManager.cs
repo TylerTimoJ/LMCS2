@@ -30,13 +30,13 @@ namespace LED_Matrix_Control_2
 
         public void ConnectToCOMPort(string port)
         {
+            if(!PortOK())
             try
             {
 
                 connectedPort = new SerialPort(port);
-                connectedPort.RtsEnable = true; //needed for power!
 
-                connectedPort.BaudRate = 256;
+                connectedPort.BaudRate = 256000;
 
                 connectedPort.Parity = Parity.None;
 
@@ -61,6 +61,7 @@ namespace LED_Matrix_Control_2
             }
         }
 
+
         public void SendFrame(byte[] rawFrameData)
         {
 
@@ -80,28 +81,48 @@ namespace LED_Matrix_Control_2
                 connectedPort.BaseStream.Write(new byte[] { 2 }, 0, 1);
 
                 connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length);
-
-                /*
-                for (int i = 0; i < rawFrameData.Length; i++)
-                {
-                    data[2] = (byte)(rawFrameData[byteOrder[i]][2] * WhiteBalance[0]);
-                    data[1] = (byte)(rawFrameData[byteOrder[i]][1] * WhiteBalance[1]);
-                    data[0] = (byte)(rawFrameData[byteOrder[i]][0] * WhiteBalance[2]);
-
-                    connectedPort.Write(data, 0, 3);
-                }
-                */
             }
         }
+
+
+        public void SendPixel(int x, int y, byte[] data)
+        {
+            if (PortOK())
+            {
+                byte[] pixelData = new byte[5];
+
+                int rawIndex = x * 16 + y;
+                int orderedIndex = byteOrder[rawIndex];
+
+                int newY = orderedIndex / 16;
+                int newX = orderedIndex % 16;
+
+                pixelData[0] = (byte)newX;
+                pixelData[1] = (byte)newY;
+
+
+                pixelData[2] = data[0];
+                pixelData[3] = data[1];
+                pixelData[4] = data[2];
+
+
+                connectedPort.BaseStream.Write(new byte[] { 0 }, 0, 1);
+
+                connectedPort.BaseStream.Write(pixelData, 0, 5);
+            }
+        }
+
+
         public void ClearFrame()
         {
             if (PortOK())
                 connectedPort.Write(new byte[] { 1 }, 0, 1);
         }
 
+
         bool PortOK()
         {
-            return connectedPort != null && connectedPort.IsOpen ? true : false;
+            return connectedPort != null && connectedPort.IsOpen;
         }
 
     }

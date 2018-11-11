@@ -49,6 +49,19 @@ namespace LED_Matrix_Control_2
             anyImageLoaded = true;
         }
 
+
+        public void LoadGifFromDisk(string path)
+        {
+            DisposeGarbage();
+
+            GifLoadParameters data = new GifLoadParameters();
+            data.path = path;
+
+            gifLoader.RunWorkerAsync(data);
+
+        }
+
+
         void LoadGifAsync(object sender, DoWorkEventArgs e)
         {
             GifLoadParameters data = e.Argument as GifLoadParameters;
@@ -60,7 +73,6 @@ namespace LED_Matrix_Control_2
                 
                 Bitmap[] workingBitm = new Bitmap[FrameCount];
 
-                //  Debug.WriteLine("frames in gif: " + FrameCount);
                 for (int i = 0; i < FrameCount; i++)
                 {
                     gifImg.SelectActiveFrame(fd, i);
@@ -74,6 +86,7 @@ namespace LED_Matrix_Control_2
         void LoadGifAsyncComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             GifLoadParameters data = e.Result as GifLoadParameters;
+            workingBitmaps = new Bitmap[data.workingBitmaps.Length];
             workingBitmaps = data.workingBitmaps;
             previewBitmaps = new Bitmap[workingBitmaps.Length];
             ImgType = imType.gif;
@@ -82,16 +95,7 @@ namespace LED_Matrix_Control_2
         }
 
 
-        public void LoadGifFromDisk(string path)
-        {
-            DisposeGarbage();
 
-            GifLoadParameters data = new GifLoadParameters();
-            data.path = path;
-
-            gifLoader.RunWorkerAsync(data);
-
-        }
 
 
         public void GeneratePreviewBitmaps(int width, int height)

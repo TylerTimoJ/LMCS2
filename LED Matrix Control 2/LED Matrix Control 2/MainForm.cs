@@ -9,16 +9,17 @@ using System.IO;
 
 namespace LED_Matrix_Control_2
 {
+
+
     public partial class MainForm : Form
     {
         //create variables for each class
         BitmapProcessor bp;
         public SerialManager sm;
-        PictureBoxBuilder pb;
+        public PictureBoxBuilder pb;
         ImageProcessor im;
         StatusLabelManager slm;
-
-
+        DrawManager dm;
         //initialize local variables
         public int pixlx = 16, pixly = 16;
         int scaleWidth, scaleHeight;
@@ -32,6 +33,7 @@ namespace LED_Matrix_Control_2
         public MainForm()
         {
             InitializeComponent();
+
         }
 
 
@@ -46,6 +48,7 @@ namespace LED_Matrix_Control_2
             pb = new PictureBoxBuilder(pixlx, pixly);
             im = new ImageProcessor();
             slm = new StatusLabelManager();
+            dm = new DrawManager();
 
 
             PortListToComboBox(); //list COM Ports
@@ -62,16 +65,16 @@ namespace LED_Matrix_Control_2
 
 
             //load pixel order settings
-            if(Properties.Settings.Default.PixelOrder != null)
-            if (Properties.Settings.Default.PixelOrder.Length == pixlx * pixly)
-            {
-                sm.byteOrder = Properties.Settings.Default.PixelOrder; //set serialmanager byte order with saved config
-                slm.PixelOrderStatus(true); //update label
-            }
-            else
-            {
-                slm.PixelOrderStatus(false); //update label
-            }
+            if (Properties.Settings.Default.PixelOrder != null)
+                if (Properties.Settings.Default.PixelOrder.Length == pixlx * pixly)
+                {
+                    sm.byteOrder = Properties.Settings.Default.PixelOrder; //set serialmanager byte order with saved config
+                    slm.PixelOrderStatus(true); //update label
+                }
+                else
+                {
+                    slm.PixelOrderStatus(false); //update label
+                }
 
 
             //load Screens to dropdown
@@ -228,8 +231,10 @@ namespace LED_Matrix_Control_2
             scaleStartX.Value = scaleStartY.Value = 0; //reset starting values
             scaleStartX.Maximum = im.workingBitmaps[0].Width - pixlx; //set maximum to the number of pixels in loaded image minus the number of horizontal pixels of matrix
             scaleStartY.Maximum = im.workingBitmaps[0].Height - pixly; //set maximum to the number of pixels in loaded image minus the number of vertical pixels of matrix
-            scaleEndXUD.Value = scaleEndXUD.Maximum = scaleEndX.Value = scaleEndX.Maximum = im.workingBitmaps[0].Width; //make sure user can't exceed the horizontal dimensions of image
-            scaleEndYUD.Value = scaleEndYUD.Maximum = scaleEndY.Value = scaleEndY.Maximum = im.workingBitmaps[0].Height; //make sure user can't exceed the vertical dimensions of image
+            scaleEndXUD.Maximum = scaleEndX.Maximum = im.workingBitmaps[0].Width;
+            scaleEndYUD.Maximum = scaleEndY.Maximum = im.workingBitmaps[0].Height;
+            scaleEndXUD.Value = scaleEndX.Value = im.workingBitmaps[0].Width; //make sure user can't exceed the horizontal dimensions of image
+            scaleEndYUD.Value = scaleEndY.Value = im.workingBitmaps[0].Height; //make sure user can't exceed the vertical dimensions of image
             scaleSettingGroup.Enabled = true; //enable controls after maximums have been set
         }
 
@@ -394,17 +399,17 @@ namespace LED_Matrix_Control_2
         {
             if (im.ImgType != ImageProcessor.imType.screen && showPreview && im.anyImageLoaded) //if image is loaded and show preview is true and the screen cap is not lo
             {
-                    Bitmap paintedBitmap = im.previewBitmaps[animIndex].Clone(new Rectangle(0, 0, im.previewBitmaps[0].Width, im.previewBitmaps[0].Height), PixelFormat.DontCare);
-                    using (Graphics g = Graphics.FromImage(paintedBitmap))
-                    {
-                        int startPosX = (int)(scaleStartX.Value * ((float)im.previewBitmaps[0].Width / (float)im.workingBitmaps[0].Width));
-                        int startPosY = (int)(scaleStartY.Value * ((float)im.previewBitmaps[0].Height / (float)im.workingBitmaps[0].Height));
-                        int endPosX = (int)(scaleEndX.Value * ((float)im.previewBitmaps[0].Width / (float)im.workingBitmaps[0].Width));
-                        int endPosY = (int)(scaleEndY.Value * ((float)im.previewBitmaps[0].Height / (float)im.workingBitmaps[0].Height));
+                Bitmap paintedBitmap = im.previewBitmaps[animIndex].Clone(new Rectangle(0, 0, im.previewBitmaps[0].Width, im.previewBitmaps[0].Height), PixelFormat.DontCare);
+                using (Graphics g = Graphics.FromImage(paintedBitmap))
+                {
+                    int startPosX = (int)(scaleStartX.Value * ((float)im.previewBitmaps[0].Width / (float)im.workingBitmaps[0].Width));
+                    int startPosY = (int)(scaleStartY.Value * ((float)im.previewBitmaps[0].Height / (float)im.workingBitmaps[0].Height));
+                    int endPosX = (int)(scaleEndX.Value * ((float)im.previewBitmaps[0].Width / (float)im.workingBitmaps[0].Width));
+                    int endPosY = (int)(scaleEndY.Value * ((float)im.previewBitmaps[0].Height / (float)im.workingBitmaps[0].Height));
 
-                        g.DrawRectangle(new Pen(Brushes.HotPink, 1), new Rectangle(startPosX, startPosY, endPosX - startPosX - 1, endPosY - startPosY - 1));
-                    }
-                    imagePictureBox.Image = paintedBitmap;
+                    g.DrawRectangle(new Pen(Brushes.HotPink, 1), new Rectangle(startPosX, startPosY, endPosX - startPosX - 1, endPosY - startPosY - 1));
+                }
+                imagePictureBox.Image = paintedBitmap;
             }
             else
                 imagePictureBox.Image = im.previewBitmaps[0];
@@ -496,7 +501,8 @@ namespace LED_Matrix_Control_2
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-
+            StopAnimationTick();
+            sm.DisconnectCOMPort();
         }
 
 
@@ -531,6 +537,44 @@ namespace LED_Matrix_Control_2
         }
 
 
+        private void DrawMouseMove(object sender, MouseEventArgs e)
+        {
+            DrawObject data = dm.DrawPixel(e);
+            if (data.draw)
+            {
+                sm.SendPixel(data.x, data.y, data.color);
+                pb.SendPixel(data.x, data.y, data.color);
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            drawColorPicker.ShowDialog();
+            dm.drawColor = drawColorPicker.Color;
+            drawColorPreview.BackColor = drawColorPicker.Color;
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            switch (ModeTabControl.SelectedIndex)
+            {
+                case 0: //settings
+                case 2: //imaging
+                case 3: //audio
+                    break;
+
+                case 1: //drawing
+                        //   matrixContainer.Cursor = ;
+                    Debug.WriteLine("test for github");
+                    break;
+
+                    
+
+
+            }
+        }
+
         private void buildBoxes_Click(object sender, EventArgs e)
         {
             pixlx = (int)pixlsXUpDown.Value;
@@ -539,7 +583,6 @@ namespace LED_Matrix_Control_2
             Properties.Settings.Default.pixelsY = pixly;
             Properties.Settings.Default.Save();
             pb.CreateBoxes(pixlx, pixly);
-            //Debug.WriteLine(Application.OpenForms[0].Width);
         }
 
 

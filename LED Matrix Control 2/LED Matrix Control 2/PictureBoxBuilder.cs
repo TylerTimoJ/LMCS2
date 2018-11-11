@@ -26,7 +26,7 @@ namespace LED_Matrix_Control_2
         }
 
         MainForm form;
-        PictureBox[,] boxes;
+        public PictureBox[,] boxes;
 
         int[][] newOrder;
         int loadedWidth, loadedHeight;
@@ -68,7 +68,8 @@ namespace LED_Matrix_Control_2
                         Width = pixelSize - 1,
                         BackColor = Color.Black,
                         Height = pixelSize - 1,
-                        Tag = index.ToString()
+                        Tag = index.ToString(),
+                        Enabled = false
 
                     };
                     form.matrixContainer.Controls.Add(boxes[x, y]);
@@ -105,6 +106,18 @@ namespace LED_Matrix_Control_2
             }
         }
 
+
+        public void SendPixel(int x, int y, byte[] data)
+        {
+            byte[] pixelData = new byte[5];
+
+            int rawIndex = x * 16 + y;
+            int orderedIndex = form.sm.byteOrder[rawIndex];
+
+            boxes[x, y].BackColor = Color.FromArgb(255, data[0], data[1], data[2]);
+        }
+
+
         public void ClearFrame()
         {
             for (int y = 0; y < loadedHeight; y++)
@@ -126,6 +139,7 @@ namespace LED_Matrix_Control_2
                     boxes[x, y].AllowDrop = true;
                     boxes[x, y].DragEnter += pb_DragEnter;
                     boxes[x, y].DragDrop += pb_DragDrop;
+                    boxes[x, y].Enabled = true;
                 }
             }
         }
