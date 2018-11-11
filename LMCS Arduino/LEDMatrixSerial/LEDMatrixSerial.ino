@@ -77,7 +77,7 @@ void serialEvent() {
       x = (int)drawIn[0];
       y = (int)drawIn[1];
       drawIndex = (int)(x*width)+y;
-      leds[drawIndex] = CRGB((int)drawIn[2], (int)drawIn[3], (int)drawIn[4]);
+      leds[drawIndex] = CRGB((byte)drawIn[2], (byte)drawIn[3], (byte)drawIn[4]);
       FastLED.show();
       Serial.flush();
 
@@ -102,7 +102,7 @@ void serialEvent() {
       Serial.readBytes(frameIn, (NUM_LEDS * 3));
       for (int i = 0; i < NUM_LEDS; i++)
       {
-        leds[i] = CRGB(frameIn[(i * 3)+2], frameIn[(i * 3)+1], frameIn[(i * 3)]);
+        leds[i] = CRGB((byte)frameIn[(i * 3)+2], (byte)frameIn[(i * 3)+1], (byte)frameIn[(i * 3)]);
       }
 
       FastLED.show();
