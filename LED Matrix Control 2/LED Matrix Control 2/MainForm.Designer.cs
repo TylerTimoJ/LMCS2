@@ -33,7 +33,6 @@
             this.matrixContainer = new System.Windows.Forms.Panel();
             this.ModeTabControl = new System.Windows.Forms.TabControl();
             this.tab1Settings = new System.Windows.Forms.TabPage();
-            this.clearButton1 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.resetPixelOrder = new System.Windows.Forms.Button();
@@ -56,6 +55,10 @@
             this.label8 = new System.Windows.Forms.Label();
             this.redWB = new System.Windows.Forms.NumericUpDown();
             this.tab2Draw = new System.Windows.Forms.TabPage();
+            this.clearButton1 = new System.Windows.Forms.Button();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.drawColorPreview = new System.Windows.Forms.PictureBox();
             this.tab3Image = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.InterpolationModeDropDown1 = new System.Windows.Forms.ComboBox();
@@ -99,10 +102,8 @@
             this.screenCapTimer = new System.Windows.Forms.Timer(this.components);
             this.statusBar = new System.Windows.Forms.Label();
             this.drawColorPicker = new System.Windows.Forms.ColorDialog();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.drawColorPreview = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ModeTabControl.SuspendLayout();
             this.tab1Settings.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -116,6 +117,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.greenWB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redWB)).BeginInit();
             this.tab2Draw.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).BeginInit();
             this.tab3Image.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -133,8 +136,7 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).BeginInit();
             this.groupBox3.SuspendLayout();
-            this.groupBox10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // connectToCOMPort
@@ -188,16 +190,6 @@
             this.tab1Settings.TabIndex = 0;
             this.tab1Settings.Text = "Settings";
             this.tab1Settings.UseVisualStyleBackColor = true;
-            // 
-            // clearButton1
-            // 
-            this.clearButton1.Location = new System.Drawing.Point(238, 271);
-            this.clearButton1.Name = "clearButton1";
-            this.clearButton1.Size = new System.Drawing.Size(75, 23);
-            this.clearButton1.TabIndex = 7;
-            this.clearButton1.Text = "Clear Frame";
-            this.clearButton1.UseVisualStyleBackColor = true;
-            this.clearButton1.Click += new System.EventHandler(this.clearFrame_Click);
             // 
             // groupBox8
             // 
@@ -391,7 +383,7 @@
             this.groupBox5.Size = new System.Drawing.Size(139, 131);
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "White Balance";
+            this.groupBox5.Text = "Color Adjustment";
             // 
             // blueWB
             // 
@@ -476,7 +468,6 @@
             // 
             // tab2Draw
             // 
-            this.tab2Draw.Controls.Add(this.clearButton1);
             this.tab2Draw.Controls.Add(this.groupBox10);
             this.tab2Draw.Location = new System.Drawing.Point(4, 22);
             this.tab2Draw.Name = "tab2Draw";
@@ -485,6 +476,50 @@
             this.tab2Draw.TabIndex = 1;
             this.tab2Draw.Text = "Drawing";
             this.tab2Draw.UseVisualStyleBackColor = true;
+            // 
+            // clearButton1
+            // 
+            this.clearButton1.Location = new System.Drawing.Point(6, 71);
+            this.clearButton1.Name = "clearButton1";
+            this.clearButton1.Size = new System.Drawing.Size(75, 23);
+            this.clearButton1.TabIndex = 7;
+            this.clearButton1.Text = "Clear Frame";
+            this.clearButton1.UseVisualStyleBackColor = true;
+            this.clearButton1.Click += new System.EventHandler(this.clearFrame_Click);
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.clearButton1);
+            this.groupBox10.Controls.Add(this.label12);
+            this.groupBox10.Controls.Add(this.pictureBox1);
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Controls.Add(this.drawColorPreview);
+            this.groupBox10.Location = new System.Drawing.Point(7, 7);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(480, 183);
+            this.groupBox10.TabIndex = 0;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "groupBox10";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Color 1";
+            // 
+            // drawColorPreview
+            // 
+            this.drawColorPreview.BackColor = System.Drawing.Color.PaleTurquoise;
+            this.drawColorPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.drawColorPreview.Location = new System.Drawing.Point(6, 19);
+            this.drawColorPreview.Name = "drawColorPreview";
+            this.drawColorPreview.Size = new System.Drawing.Size(20, 20);
+            this.drawColorPreview.TabIndex = 0;
+            this.drawColorPreview.TabStop = false;
+            this.drawColorPreview.Click += new System.EventHandler(this.ChooseDrawColor);
             // 
             // tab3Image
             // 
@@ -957,50 +992,29 @@
             // 
             // drawColorPicker
             // 
+            this.drawColorPicker.Color = System.Drawing.Color.Red;
             this.drawColorPicker.FullOpen = true;
             this.drawColorPicker.ShowHelp = true;
             this.drawColorPicker.SolidColorOnly = true;
             // 
-            // groupBox10
+            // label12
             // 
-            this.groupBox10.Controls.Add(this.label1);
-            this.groupBox10.Controls.Add(this.button1);
-            this.groupBox10.Controls.Add(this.drawColorPreview);
-            this.groupBox10.Location = new System.Drawing.Point(7, 7);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(480, 183);
-            this.groupBox10.TabIndex = 0;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "groupBox10";
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(32, 52);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(40, 13);
+            this.label12.TabIndex = 4;
+            this.label12.Text = "Color 2";
             // 
-            // drawColorPreview
+            // pictureBox1
             // 
-            this.drawColorPreview.BackColor = System.Drawing.Color.Black;
-            this.drawColorPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawColorPreview.Location = new System.Drawing.Point(6, 19);
-            this.drawColorPreview.Name = "drawColorPreview";
-            this.drawColorPreview.Size = new System.Drawing.Size(23, 23);
-            this.drawColorPreview.TabIndex = 0;
-            this.drawColorPreview.TabStop = false;
-            this.drawColorPreview.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(175, 71);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Draw Color";
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(6, 45);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
             // 
             // MainForm
             // 
@@ -1034,6 +1048,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.greenWB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redWB)).EndInit();
             this.tab2Draw.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).EndInit();
             this.tab3Image.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
@@ -1054,9 +1071,7 @@
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.drawColorPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1136,8 +1151,9 @@
         private System.Windows.Forms.ColorDialog drawColorPicker;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox drawColorPreview;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

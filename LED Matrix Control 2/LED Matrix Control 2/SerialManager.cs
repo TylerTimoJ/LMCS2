@@ -78,7 +78,7 @@ namespace LED_Matrix_Control_2
                     orderIndex++;
                 }
 
-                connectedPort.BaseStream.Write(new byte[] { 2 }, 0, 1);
+                connectedPort.BaseStream.WriteAsync(new byte[] { 2 }, 0, 1);
 
                 connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length);
             }
@@ -89,6 +89,7 @@ namespace LED_Matrix_Control_2
         {
             if (PortOK())
             {
+
                 byte[] pixelData = new byte[5];
 
                 int rawIndex = x * 16 + y;
@@ -106,9 +107,9 @@ namespace LED_Matrix_Control_2
                 pixelData[4] = data[2];
 
 
-                connectedPort.BaseStream.Write(new byte[] { 0 }, 0, 1);
+                connectedPort.BaseStream.WriteAsync(new byte[] { 0 }, 0, 1);
 
-                connectedPort.BaseStream.Write(pixelData, 0, 5);
+                connectedPort.BaseStream.WriteAsync(pixelData, 0, 5);
             }
         }
 

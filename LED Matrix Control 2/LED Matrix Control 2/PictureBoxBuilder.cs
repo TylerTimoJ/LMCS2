@@ -25,6 +25,8 @@ namespace LED_Matrix_Control_2
             loadedHeight = height;
         }
 
+        public bool isDrawingMode = false;
+
         MainForm form;
         public PictureBox[,] boxes;
 
@@ -68,9 +70,7 @@ namespace LED_Matrix_Control_2
                         Width = pixelSize - 1,
                         BackColor = Color.Black,
                         Height = pixelSize - 1,
-                        Tag = index.ToString(),
-                        Enabled = false
-
+                        Tag = index.ToString()
                     };
                     form.matrixContainer.Controls.Add(boxes[x, y]);
                     index++;
@@ -91,6 +91,18 @@ namespace LED_Matrix_Control_2
                 }
             }
             boxes = null;
+        }
+
+        public void ChangeDrawEnable(bool state)
+        {
+            isDrawingMode = state;
+            for (int y = 0; y < loadedHeight; y++)
+            {
+                for (int x = 0; x < loadedWidth; x++)
+                {
+                    boxes[x, y].Enabled = !state;
+                }
+            }
         }
 
         public void FrameToBoxes(byte[] data)

@@ -242,6 +242,7 @@ namespace LED_Matrix_Control_2
 
         private void animTimer_Tick(object sender, EventArgs e)
         {
+            animIndex = animIndex < 0 ? 0 : animIndex; //prevent animation index from being less than 0
             sm.SendFrame(im.imageFrames[animIndex]); //send frame at animation index;
 
             //update display at animation index;
@@ -501,6 +502,7 @@ namespace LED_Matrix_Control_2
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            sm.ClearFrame();
             StopAnimationTick();
             sm.DisconnectCOMPort();
         }
@@ -539,15 +541,21 @@ namespace LED_Matrix_Control_2
 
         private void DrawMouseMove(object sender, MouseEventArgs e)
         {
-            DrawObject data = dm.DrawPixel(e);
-            if (data.draw)
+            if (pb.isDrawingMode)
             {
-                sm.SendPixel(data.x, data.y, data.color);
-                pb.SendPixel(data.x, data.y, data.color);
+                DrawObject data = dm.DrawPixel(e);
+                if (data.draw)
+                {
+                    if (pb.boxes[data.x,data.y].BackColor != drawColorPicker.Color)
+                    {
+                        sm.SendPixel(data.x, data.y, data.color);
+                        pb.SendPixel(data.x, data.y, data.color);
+                    }
+                }
             }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void ChooseDrawColor(object sender, EventArgs e)
         {
             drawColorPicker.ShowDialog();
             dm.drawColor = drawColorPicker.Color;
@@ -556,24 +564,27 @@ namespace LED_Matrix_Control_2
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
             switch (ModeTabControl.SelectedIndex)
             {
                 case 0: //settings
                 case 2: //imaging
                 case 3: //audio
+                    pb.ChangeDrawEnable(false);
                     break;
 
                 case 1: //drawing
                         //   matrixContainer.Cursor = ;
                     Debug.WriteLine("test for github");
+                    pb.ChangeDrawEnable(true);
                     break;
 
-                    
+
 
 
             }
         }
+
 
         private void buildBoxes_Click(object sender, EventArgs e)
         {
