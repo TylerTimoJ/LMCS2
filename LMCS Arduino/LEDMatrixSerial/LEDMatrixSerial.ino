@@ -1,16 +1,16 @@
 #include "FastLED.h"
 
 // How many leds in your matrix?
-#define NUM_LEDS 256
+#define NUM_LEDS 512
 
-int width = 16;
+int width = 32;
 int height = 16;
 
 int drawIndex = 0;
 int x;
 int y;
 byte pixelType = 0;
-char drawIn[4];
+char drawIn[5];
 char frameIn[NUM_LEDS * 3];
 
 
@@ -57,7 +57,7 @@ void setup() {
   }
   FastLED.show();
 
-  Serial.begin(256000);
+  Serial.begin(1000000);
 }
 
 void loop() {
@@ -74,11 +74,10 @@ void serialEvent() {
       Serial.readBytes(drawIn, 5);
       x = (int)drawIn[0];
       y = (int)drawIn[1];
-      drawIndex = (int)(x * width) + y;
+      drawIndex = (int)(y * width) + x;
       leds[drawIndex] = CRGB((byte)drawIn[2], (byte)drawIn[3], (byte)drawIn[4]);
       FastLED.show();
-      delay(1);
-      Serial.flush();
+      //delay(1);
 
       break;
 
@@ -92,7 +91,6 @@ void serialEvent() {
       }
 
       FastLED.show();
-      Serial.flush();
       break;
 
     case 2:
@@ -104,16 +102,14 @@ void serialEvent() {
         leds[i] = CRGB((byte)frameIn[(i * 3) + 2], (byte)frameIn[(i * 3) + 1], (byte)frameIn[(i * 3)]);
       }
       FastLED.show();
-      Serial.flush();
-      delay(1);
       break;
 
     case 3:
 
       int brightnessLED = Serial.read();
       FastLED.setBrightness(brightnessLED);
-      Serial.flush();
-
+      FastLED.show();
       break;
   }
+  Serial.write(16);
 }

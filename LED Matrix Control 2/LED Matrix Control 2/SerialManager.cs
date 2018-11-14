@@ -12,45 +12,56 @@ namespace LED_Matrix_Control_2
     {
         public float[] WhiteBalance = new float[] { 1f, 1f, 1f };
         SerialPort connectedPort;
-        public int[] byteOrder;
+        public int[] frameByteOrder;
+        public int[] pixelByteOrder;
+        public bool deviceReady = true;
+
+        MainForm form;
+
+        public SerialManager()
+        {
+            form = (MainForm)Application.OpenForms[0];
+        }
 
         public string[] ListCOMPorts()
         {
-            using (var searcher = new ManagementObjectSearcher("SELECT * FROM WIN32_SerialPort"))
-            {
-                string[] portnames = SerialPort.GetPortNames();
-                var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
-                var tList = (from n in portnames join p in ports on n equals p["DeviceID"].ToString() select n + " - " + p["Caption"]).ToList();
-                tList.ForEach(Console.WriteLine);
-                return tList.ToArray();
-
-            }
+            string[] portnames = SerialPort.GetPortNames();
+            return portnames;
         }
 
 
         public void ConnectToCOMPort(string port)
         {
-            if(!PortOK())
-            try
-            {
+            if (!PortOK())
+                try
+                {
 
-                connectedPort = new SerialPort(port);
+                    connectedPort = new SerialPort(port);
 
-                connectedPort.BaudRate = 256000;
+                    connectedPort.BaudRate = 1000000;
 
-                connectedPort.Parity = Parity.None;
+                    connectedPort.Parity = Parity.None;
 
-                connectedPort.DataBits = 8;
+                    connectedPort.DataBits = 8;
 
-                connectedPort.Handshake = Handshake.None;
+                    connectedPort.Handshake = Handshake.None;
 
-                connectedPort.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Cannot connect to COM Port \n" + e.Message);
-            }
+                    connectedPort.DataReceived += ConnectedPort_DataReceived;
+
+                    connectedPort.Open();
+
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Cannot connect to COM Port \n" + e.Message);
+                }
         }
+
+        private void ConnectedPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+                deviceReady = connectedPort.BaseStream.ReadByte() == 16 ? true : false;
+        }
+
         public void DisconnectCOMPort()
         {
             if (PortOK())
@@ -64,23 +75,20 @@ namespace LED_Matrix_Control_2
 
         public void SendFrame(byte[] rawFrameData)
         {
-
             if (PortOK())
             {
-
-                byte[] data = new byte[rawFrameData.Length];
+                deviceReady = false;
+                byte[] data = new byte[rawFrameData.Length+1];
+                data[0] = 2;
                 int orderIndex = 0;
-                for (int i = 0; i < rawFrameData.Length; i += 3)
+                for (int i = 1; i < rawFrameData.Length+1; i += 3)
                 {
-                    data[i] = rawFrameData[byteOrder[orderIndex] * 3];
-                    data[i + 1] = rawFrameData[byteOrder[orderIndex] * 3 + 1];
-                    data[i + 2] = rawFrameData[byteOrder[orderIndex] * 3 + 2];
+                    data[i] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3] * WhiteBalance[2]);
+                    data[i + 1] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 1] * WhiteBalance[1]);
+                    data[i + 2] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 2] * WhiteBalance[0]);
                     orderIndex++;
                 }
-
-                connectedPort.BaseStream.WriteAsync(new byte[] { 2 }, 0, 1);
-
-                connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length);
+                connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length+1);
             }
         }
 
@@ -89,27 +97,40 @@ namespace LED_Matrix_Control_2
         {
             if (PortOK())
             {
-
-                byte[] pixelData = new byte[5];
-
-                int rawIndex = x * 16 + y;
-                int orderedIndex = byteOrder[rawIndex];
-
-                int newY = orderedIndex / 16;
-                int newX = orderedIndex % 16;
-
-                pixelData[0] = (byte)newX;
-                pixelData[1] = (byte)newY;
+                deviceReady = false;
+                byte[] pixelData = new byte[6];
+                pixelData[0] = 0;
 
 
-                pixelData[2] = data[0];
-                pixelData[3] = data[1];
-                pixelData[4] = data[2];
+                int w = form.pixlx;
+                int h = form.pixly;
+
+                int rawIndex = (y * w) + x;
+                int orderedIndex = pixelByteOrder[rawIndex];
+
+               // orderedIndex
+                //int orderedIndex = rawIndex;
+
+                int newX = orderedIndex % w;
+                int newY = orderedIndex / w;
 
 
-                connectedPort.BaseStream.WriteAsync(new byte[] { 0 }, 0, 1);
+                
+                pixelData[1] = (byte)newX;
+                pixelData[2] = (byte)newY;
 
-                connectedPort.BaseStream.WriteAsync(pixelData, 0, 5);
+               // pixelData[1] = (byte)x;
+               // pixelData[2] = (byte)y;
+
+
+                pixelData[3] = (byte)(data[0] * WhiteBalance[0]);
+                pixelData[4] = (byte)(data[1] * WhiteBalance[1]);
+                pixelData[5] = (byte)(data[2] * WhiteBalance[2]);
+
+
+                //connectedPort.BaseStream.Write(new byte[] { 0 }, 0, 1);
+
+                connectedPort.BaseStream.Write(pixelData, 0, 6);
             }
         }
 
@@ -117,13 +138,21 @@ namespace LED_Matrix_Control_2
         public void ClearFrame()
         {
             if (PortOK())
-                connectedPort.Write(new byte[] { 1 }, 0, 1);
+                connectedPort.BaseStream.WriteAsync(new byte[] { 1 }, 0, 1);
+        }
+
+
+        public void UpdateBrightness(byte brightness)
+        {
+            if (PortOK())
+                connectedPort.BaseStream.WriteAsync(new byte[] { 3, brightness }, 0, 2);
+
         }
 
 
         bool PortOK()
         {
-            return connectedPort != null && connectedPort.IsOpen;
+            return connectedPort != null && connectedPort.IsOpen && deviceReady;
         }
 
     }

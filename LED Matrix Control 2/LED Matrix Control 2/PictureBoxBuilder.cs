@@ -124,7 +124,7 @@ namespace LED_Matrix_Control_2
             byte[] pixelData = new byte[5];
 
             int rawIndex = x * 16 + y;
-            int orderedIndex = form.sm.byteOrder[rawIndex];
+            int orderedIndex = form.sm.frameByteOrder[rawIndex];
 
             boxes[x, y].BackColor = Color.FromArgb(255, data[0], data[1], data[2]);
         }
@@ -182,7 +182,7 @@ namespace LED_Matrix_Control_2
             }
         }
 
-        
+
 
 
         public void OrderManager(int startIndex, int endIndex)
@@ -223,6 +223,8 @@ namespace LED_Matrix_Control_2
             }
 
         }
+
+
         void DrawOnBox(int x, int y, int totalPixels)
         {
             boxes[x, y].BackColor = Color.FromArgb(255, 0, 0, (int)(((float)drawIndex / (float)totalPixels) * 64 + 64));
@@ -255,6 +257,7 @@ namespace LED_Matrix_Control_2
             boxes[x, y].Image = bmp;
         }
 
+
         public void SaveOrder()
         {
             int[] order = new int[loadedHeight * loadedWidth];
@@ -275,18 +278,49 @@ namespace LED_Matrix_Control_2
                         boxes[x, y].DragDrop -= pb_DragDrop;
                     }
                 }
-                Properties.Settings.Default.PixelOrder = order;
-                Properties.Settings.Default.Save();
-                form.sm.byteOrder = order;
-                DestroyBoxes();
-                CreateBoxes(loadedWidth, loadedHeight);
+                SaveFileDialog sf = new SaveFileDialog();
 
+                sf.Title = "Save Pixel Order";
+                sf.Filter = "Pixel Order|*.pxlod";
+                sf.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                sf.ShowDialog();
+
+                if (sf.FileName != "")
+                {
+
+                    string[] fileOrderData = order.Select(x => x.ToString()).ToArray();
+                    File.WriteAllLines(sf.FileName, fileOrderData);
+
+                    Properties.Settings.Default.previousPixelOrderFile = sf.FileName;
+                    form.sm.frameByteOrder = order;
+
+                    int[] pixelOrder = new int[order.Length];
+                    for (int i = 0; i < order.Length; i++)
+                    {
+                        //  int keyIndex = Array.FindIndex(words, w => w.IsKey);
+                        pixelOrder[i] = Array.IndexOf(order, i);
+                    }
+                    form.sm.pixelByteOrder = pixelOrder;
+
+                    DestroyBoxes();
+                    CreateBoxes(loadedWidth, loadedHeight);
+                }
+                sf.Dispose();
             }
             else
             {
-                MessageBox.Show("Not all Pixels have an order index");
+                MessageBox.Show("Not all pixels have an order index");
             }
         }
+
+
+        public void DoneEditing()
+        {
+            drawIndex = 0;
+            DestroyBoxes();
+            CreateBoxes(loadedWidth, loadedHeight);
+        }
+
         public void ResetOrder()
         {
             drawIndex = 0;
@@ -294,8 +328,5 @@ namespace LED_Matrix_Control_2
             CreateBoxes(loadedWidth, loadedHeight);
             Edit();
         }
-
-
-
     }
 }

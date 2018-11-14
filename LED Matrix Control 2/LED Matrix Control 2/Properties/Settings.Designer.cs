@@ -85,12 +85,26 @@ namespace LED_Matrix_Control_2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public int[] PixelOrder {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\tyler\\Documents\\LMCS2\\LED Matrix Control 2\\LED Matrix Control 2\\bin\\x86\\" +
+            "Debug\\order1.pxlod")]
+        public string previousPixelOrderFile {
             get {
-                return ((int[])(this["PixelOrder"]));
+                return ((string)(this["previousPixelOrderFile"]));
             }
             set {
-                this["PixelOrder"] = value;
+                this["previousPixelOrderFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int brightness {
+            get {
+                return ((int)(this["brightness"]));
+            }
+            set {
+                this["brightness"] = value;
             }
         }
     }

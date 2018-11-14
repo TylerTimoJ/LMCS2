@@ -93,11 +93,17 @@
     <Compile Include="BitmapProcessor.cs" />
     <Compile Include="DrawManager.cs" />
     <Compile Include="ImageProcessor.cs" />
+    <Compile Include="MainFormImaging.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFormDrawing.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PictureBoxBuilder.cs" />
     <Compile Include="Program.cs" />

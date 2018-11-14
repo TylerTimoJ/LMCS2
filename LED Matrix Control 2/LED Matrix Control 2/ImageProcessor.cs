@@ -83,6 +83,7 @@ namespace LED_Matrix_Control_2
             }
         }
 
+
         void LoadGifAsyncComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             GifLoadParameters data = e.Result as GifLoadParameters;
@@ -93,9 +94,6 @@ namespace LED_Matrix_Control_2
             anyImageLoaded = true;
             form.LoadGifComplete();
         }
-
-
-
 
 
         public void GeneratePreviewBitmaps(int width, int height)
@@ -117,6 +115,7 @@ namespace LED_Matrix_Control_2
             }
         }
 
+
         private void DisposeGarbage()
         {
             if (workingBitmaps != null)
@@ -126,6 +125,7 @@ namespace LED_Matrix_Control_2
                 foreach (Bitmap b in previewBitmaps)
                     b.Dispose();
         }
+
 
         public void CaptureScreen(Rectangle captureArea)
         {

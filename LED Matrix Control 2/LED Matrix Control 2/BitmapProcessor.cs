@@ -14,9 +14,6 @@ namespace LED_Matrix_Control_2
 {
     public class BitmapProcessor
     {
-
-
-
         public byte[] ProcessImage(Bitmap image, int width, int height, InterpolationMode mode, Rectangle dimensions)
         {
             Bitmap workingBitmap = CropImage(image, dimensions);
@@ -27,6 +24,7 @@ namespace LED_Matrix_Control_2
             workingBitmap.Dispose();
             return bitmapBytes;
         }
+
 
         Bitmap CropImage(Bitmap img, Rectangle cropArea)
         {
@@ -39,6 +37,7 @@ namespace LED_Matrix_Control_2
             return bmp;
         }
 
+
         private byte[] BitmapToByteArray(Bitmap bitmap)
         {
             BitmapData bmpdata = null;
@@ -49,8 +48,8 @@ namespace LED_Matrix_Control_2
             Marshal.Copy(ptr, bytedata, 0, numbytes);
             bitmap.UnlockBits(bmpdata);
             return bytedata;
-
         }
+
 
         private Bitmap DownsampleBitmap(Bitmap b, int width, int height, InterpolationMode mode)
         {
@@ -61,10 +60,9 @@ namespace LED_Matrix_Control_2
                 g.InterpolationMode = mode;
                 g.DrawImage(b, 0, 0, width, height);
             }
-            //b.Dispose();
-
             return result;
         }
+
 
         public Bitmap ImagePreviewHandler(Bitmap b, int x, int y, int endX, int endY)
         {
@@ -75,9 +73,9 @@ namespace LED_Matrix_Control_2
                 g.SmoothingMode = SmoothingMode.None;
                 g.DrawRectangle(new Pen(Brushes.HotPink, (b.Width/150)), new Rectangle(x, y, endX - x, endY - y));
             }
-            
             return processedBitmap;
         }
+
 
         public Bitmap ScaleToFitPB(Bitmap source, int pbWidth, int pbHeight)
         {
@@ -96,6 +94,7 @@ namespace LED_Matrix_Control_2
             return returnBit;
         }
 
+
         public Bitmap ScreenToBitmap(Rectangle captureArea)
         {
             Bitmap screenBitmap = new Bitmap(captureArea.Width, captureArea.Height, PixelFormat.Format24bppRgb);
@@ -106,35 +105,5 @@ namespace LED_Matrix_Control_2
                 }
             return screenBitmap;
         }
-
-        /*
-         * used to help debug.
-         * 
-        public void TempImage()
-        {
-            Bitmap b = new Bitmap(@"D:\testGrid.bmp");
-            for (int y = 0; y < 16; y++)
-            {
-                for (int x = 0; x < 16; x++)
-                {
-                    RectangleF rectf = new RectangleF(x * 32, y * 32, 64, 64);
-                    using (Graphics g = Graphics.FromImage(b))
-                    {
-                        g.SmoothingMode = SmoothingMode.AntiAlias;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.DrawString(((x * 16) + (15 - y)).ToString(), new Font("Tahoma", 8), Brushes.HotPink, rectf);
-                        g.Flush();
-                    }
-                }
-            }
-            Bitmap newBit = b;
-            newBit.Save(@"D:\orderOfMyDisplay.bmp");
-        }
-        */
-
-
-
-        
     }
 }

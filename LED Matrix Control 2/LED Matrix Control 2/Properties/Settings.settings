@@ -17,8 +17,11 @@
     <Setting Name="wbBlue" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">255</Value>
     </Setting>
-    <Setting Name="PixelOrder" Type="System.Int32[]" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="previousPixelOrderFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\bin\x86\Debug\order1.pxlod</Value>
+    </Setting>
+    <Setting Name="brightness" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
     </Setting>
   </Settings>
 </SettingsFile>

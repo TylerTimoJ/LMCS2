@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace LED_Matrix_Control_2
 {
@@ -16,7 +17,7 @@ namespace LED_Matrix_Control_2
 
         Point previousLoc;
         byte[] pixelData;
-        public Color drawColor;
+        public Color drawColor1 = Color.White, drawColor2 = Color.Black;
 
 
         public DrawManager()
@@ -24,9 +25,8 @@ namespace LED_Matrix_Control_2
             form = (MainForm)Application.OpenForms[0];
             previousLoc.X = -1;
             previousLoc.Y = -1;
-            drawColor = Color.Black;
+            drawColor1 = Color.Black;
         }
-
 
 
         public DrawObject DrawPixel(MouseEventArgs e)
@@ -46,7 +46,7 @@ namespace LED_Matrix_Control_2
 
                 if (y != previousLoc.Y || x != previousLoc.X)
                 {
-                    pixelData = e.Button == MouseButtons.Left ? new byte[3] { drawColor.R, drawColor.G, drawColor.B } : new byte[3] { 0, 0, 0 };
+                    pixelData = e.Button == MouseButtons.Left ? new byte[3] { drawColor1.R, drawColor1.G, drawColor1.B } : new byte[3] { drawColor2.R, drawColor2.G, drawColor2.B };
 
                     data.draw = true;
                     data.x = x;
