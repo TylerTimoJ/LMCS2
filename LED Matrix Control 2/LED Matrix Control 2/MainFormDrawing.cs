@@ -25,6 +25,7 @@ namespace LED_Matrix_Control_2
         {
             sm.ClearFrame();
             pb.ClearFrame();
+            dm.ClearFrame();
         }
 
 
@@ -35,11 +36,8 @@ namespace LED_Matrix_Control_2
                 DrawObject data = dm.DrawPixel(e);
                 if (data.draw)
                 {
-                    if (pb.boxes[data.x, data.y].BackColor != drawColorPicker.Color)
-                    {
                         sm.SendPixel(data.x, data.y, data.color);
                         pb.SendPixel(data.x, data.y, data.color);
-                    }
                 }
             }
         }

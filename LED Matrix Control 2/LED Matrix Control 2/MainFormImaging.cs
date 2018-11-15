@@ -138,7 +138,7 @@ namespace LED_Matrix_Control_2
                 pb.FrameToBoxes(im.imageFrames[animIndex]);
                 UpdateImagePreview();
             }
-
+            
             switch (animationMode) //switch based on selected mode
             {
                 //play through each frame forwards

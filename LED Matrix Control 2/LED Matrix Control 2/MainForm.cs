@@ -10,8 +10,6 @@ using System.Linq;
 
 namespace LED_Matrix_Control_2
 {
-
-    //TEST
     public partial class MainForm : Form
     {
         //create variables for each class
@@ -219,7 +217,10 @@ namespace LED_Matrix_Control_2
                 slm.PixelOrderStatus(false); //update label
         }
 
-
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            showPreview = showPreviewCheckBox.Checked;
+        }
 
 
         private void brightnessUD_ValueChanged(object sender, EventArgs e)
