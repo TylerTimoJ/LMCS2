@@ -37,6 +37,7 @@ namespace LED_Matrix_Control_2
             gifLoader = new BackgroundWorker();
             gifLoader.DoWork += LoadGifAsync;
             gifLoader.RunWorkerCompleted += LoadGifAsyncComplete;
+            // workingBitmaps = new Bitmap[1];
         }
 
 
@@ -70,7 +71,7 @@ namespace LED_Matrix_Control_2
             {
                 FrameDimension fd = new FrameDimension(gifImg.FrameDimensionsList[0]);
                 int FrameCount = gifImg.GetFrameCount(fd);
-                
+
                 Bitmap[] workingBitm = new Bitmap[FrameCount];
 
                 for (int i = 0; i < FrameCount; i++)
@@ -130,7 +131,7 @@ namespace LED_Matrix_Control_2
         public void CaptureScreen(Rectangle captureArea)
         {
             DisposeGarbage();
-            previewBitmaps = new Bitmap[1];
+           // previewBitmaps = new Bitmap[1];
             workingBitmaps = new Bitmap[1];
             workingBitmaps[0] = bp.ScreenToBitmap(captureArea);
             ImgType = imType.screen;

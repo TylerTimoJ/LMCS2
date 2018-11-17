@@ -34,7 +34,6 @@
             this.ModeTabControl = new System.Windows.Forms.TabControl();
             this.tab1Settings = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.showPreviewCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.loadPixelOrder = new System.Windows.Forms.Button();
             this.resetPixelOrder = new System.Windows.Forms.Button();
@@ -61,11 +60,14 @@
             this.redWB = new System.Windows.Forms.NumericUpDown();
             this.tab2Draw = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.saveDrawFrameButton = new System.Windows.Forms.Button();
+            this.colorInfoLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.color2Button = new System.Windows.Forms.Button();
             this.color1Button = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.clearButton1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ccb10 = new System.Windows.Forms.Button();
             this.ccb9 = new System.Windows.Forms.Button();
@@ -97,8 +99,8 @@
             this.cb3 = new System.Windows.Forms.Button();
             this.cb2 = new System.Windows.Forms.Button();
             this.cb1 = new System.Windows.Forms.Button();
-            this.clearButton1 = new System.Windows.Forms.Button();
             this.tab3Image = new System.Windows.Forms.TabPage();
+            this.showPreviewCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.InterpolationModeDropDown1 = new System.Windows.Forms.ComboBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -131,7 +133,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.imagePreviewGroup = new System.Windows.Forms.GroupBox();
             this.imagePictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.imageSelectButton = new System.Windows.Forms.Button();
@@ -172,7 +174,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.scaleEndX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scaleStartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scaleStartX)).BeginInit();
-            this.groupBox4.SuspendLayout();
+            this.imagePreviewGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -219,6 +221,7 @@
             // 
             // tab1Settings
             // 
+            this.tab1Settings.Controls.Add(this.showPreviewCheckBox);
             this.tab1Settings.Controls.Add(this.groupBox8);
             this.tab1Settings.Controls.Add(this.groupBox5);
             this.tab1Settings.Location = new System.Drawing.Point(4, 22);
@@ -240,17 +243,6 @@
             this.groupBox8.TabIndex = 8;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Setup";
-            // 
-            // showPreviewCheckBox
-            // 
-            this.showPreviewCheckBox.AutoSize = true;
-            this.showPreviewCheckBox.Location = new System.Drawing.Point(8, 129);
-            this.showPreviewCheckBox.Name = "showPreviewCheckBox";
-            this.showPreviewCheckBox.Size = new System.Drawing.Size(94, 17);
-            this.showPreviewCheckBox.TabIndex = 8;
-            this.showPreviewCheckBox.Text = "Show Preivew";
-            this.showPreviewCheckBox.UseVisualStyleBackColor = true;
-            this.showPreviewCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // groupBox9
             // 
@@ -584,15 +576,36 @@
             // 
             this.groupBox10.AutoSize = true;
             this.groupBox10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox10.Controls.Add(this.saveDrawFrameButton);
+            this.groupBox10.Controls.Add(this.colorInfoLabel);
             this.groupBox10.Controls.Add(this.panel2);
             this.groupBox10.Controls.Add(this.clearButton1);
             this.groupBox10.Controls.Add(this.panel1);
             this.groupBox10.Location = new System.Drawing.Point(7, 7);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(374, 152);
+            this.groupBox10.Size = new System.Drawing.Size(374, 181);
             this.groupBox10.TabIndex = 0;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Pen Settings";
+            // 
+            // saveDrawFrameButton
+            // 
+            this.saveDrawFrameButton.Location = new System.Drawing.Point(5, 139);
+            this.saveDrawFrameButton.Name = "saveDrawFrameButton";
+            this.saveDrawFrameButton.Size = new System.Drawing.Size(89, 23);
+            this.saveDrawFrameButton.TabIndex = 11;
+            this.saveDrawFrameButton.Text = "Save Frame";
+            this.saveDrawFrameButton.UseVisualStyleBackColor = true;
+            this.saveDrawFrameButton.Click += new System.EventHandler(this.saveFrameButton_Click);
+            // 
+            // colorInfoLabel
+            // 
+            this.colorInfoLabel.AutoSize = true;
+            this.colorInfoLabel.Location = new System.Drawing.Point(112, 115);
+            this.colorInfoLabel.Name = "colorInfoLabel";
+            this.colorInfoLabel.Size = new System.Drawing.Size(156, 13);
+            this.colorInfoLabel.TabIndex = 10;
+            this.colorInfoLabel.Text = "Color Info: R:255, G:255, B:255";
             // 
             // panel2
             // 
@@ -647,6 +660,16 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Color\r\n1\r\n";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // clearButton1
+            // 
+            this.clearButton1.Location = new System.Drawing.Point(5, 110);
+            this.clearButton1.Name = "clearButton1";
+            this.clearButton1.Size = new System.Drawing.Size(89, 23);
+            this.clearButton1.TabIndex = 7;
+            this.clearButton1.Text = "Clear Frame";
+            this.clearButton1.UseVisualStyleBackColor = true;
+            this.clearButton1.Click += new System.EventHandler(this.clearFrame_Click);
             // 
             // panel1
             // 
@@ -1040,24 +1063,13 @@
             this.cb1.UseVisualStyleBackColor = false;
             this.cb1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ColorPaletteUp);
             // 
-            // clearButton1
-            // 
-            this.clearButton1.Location = new System.Drawing.Point(6, 110);
-            this.clearButton1.Name = "clearButton1";
-            this.clearButton1.Size = new System.Drawing.Size(75, 23);
-            this.clearButton1.TabIndex = 7;
-            this.clearButton1.Text = "Clear Frame";
-            this.clearButton1.UseVisualStyleBackColor = true;
-            this.clearButton1.Click += new System.EventHandler(this.clearFrame_Click);
-            // 
             // tab3Image
             // 
-            this.tab3Image.Controls.Add(this.showPreviewCheckBox);
             this.tab3Image.Controls.Add(this.groupBox7);
             this.tab3Image.Controls.Add(this.groupBox6);
             this.tab3Image.Controls.Add(this.animationGroup);
             this.tab3Image.Controls.Add(this.scaleSettingGroup);
-            this.tab3Image.Controls.Add(this.groupBox4);
+            this.tab3Image.Controls.Add(this.imagePreviewGroup);
             this.tab3Image.Controls.Add(this.groupBox3);
             this.tab3Image.Location = new System.Drawing.Point(4, 22);
             this.tab3Image.Name = "tab3Image";
@@ -1065,6 +1077,19 @@
             this.tab3Image.TabIndex = 2;
             this.tab3Image.Text = "Imaging";
             this.tab3Image.UseVisualStyleBackColor = true;
+            // 
+            // showPreviewCheckBox
+            // 
+            this.showPreviewCheckBox.AutoSize = true;
+            this.showPreviewCheckBox.Checked = true;
+            this.showPreviewCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showPreviewCheckBox.Location = new System.Drawing.Point(146, 201);
+            this.showPreviewCheckBox.Name = "showPreviewCheckBox";
+            this.showPreviewCheckBox.Size = new System.Drawing.Size(94, 17);
+            this.showPreviewCheckBox.TabIndex = 8;
+            this.showPreviewCheckBox.Text = "Show Preivew";
+            this.showPreviewCheckBox.UseVisualStyleBackColor = true;
+            this.showPreviewCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // groupBox7
             // 
@@ -1455,17 +1480,17 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Start X";
             // 
-            // groupBox4
+            // imagePreviewGroup
             // 
-            this.groupBox4.AutoSize = true;
-            this.groupBox4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox4.Controls.Add(this.imagePictureBox);
-            this.groupBox4.Location = new System.Drawing.Point(4, 295);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(497, 338);
-            this.groupBox4.TabIndex = 2;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Image Preview";
+            this.imagePreviewGroup.AutoSize = true;
+            this.imagePreviewGroup.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.imagePreviewGroup.Controls.Add(this.imagePictureBox);
+            this.imagePreviewGroup.Location = new System.Drawing.Point(4, 295);
+            this.imagePreviewGroup.Name = "imagePreviewGroup";
+            this.imagePreviewGroup.Size = new System.Drawing.Size(497, 338);
+            this.imagePreviewGroup.TabIndex = 2;
+            this.imagePreviewGroup.TabStop = false;
+            this.imagePreviewGroup.Text = "Image Preview";
             // 
             // imagePictureBox
             // 
@@ -1520,7 +1545,7 @@
             // 
             // screenCapTimer
             // 
-            this.screenCapTimer.Interval = 1;
+            this.screenCapTimer.Interval = 15;
             this.screenCapTimer.Tick += new System.EventHandler(this.screenCapTimer_Tick);
             // 
             // statusBar
@@ -1597,7 +1622,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.scaleEndX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.scaleStartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.scaleStartX)).EndInit();
-            this.groupBox4.ResumeLayout(false);
+            this.imagePreviewGroup.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePictureBox)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1625,7 +1650,7 @@
         private System.Windows.Forms.OpenFileDialog OpenImageFile;
         private System.Windows.Forms.PictureBox imagePictureBox;
         private System.Windows.Forms.ComboBox InterpolationModeDropDown1;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox imagePreviewGroup;
         private System.Windows.Forms.Button clearButton1;
         private System.Windows.Forms.GroupBox scaleSettingGroup;
         private System.Windows.Forms.Label label5;
@@ -1719,6 +1744,8 @@
         private System.Windows.Forms.Button color1Button;
         private System.Windows.Forms.Button cb6;
         private System.Windows.Forms.CheckBox showPreviewCheckBox;
+        private System.Windows.Forms.Label colorInfoLabel;
+        private System.Windows.Forms.Button saveDrawFrameButton;
     }
 }
 

@@ -103,6 +103,7 @@ namespace LED_Matrix_Control_2
                 {
                     captureGraphics.CopyFromScreen(captureArea.Left, captureArea.Top, 0, 0, captureArea.Size);
                 }
+
             return screenBitmap;
         }
     }

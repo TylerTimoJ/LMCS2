@@ -96,11 +96,7 @@ void serialEvent() {
     case 2:
 
       //frame in mode
-      Serial.readBytes(frameIn, (NUM_LEDS * 3));
-      for (int i = 0; i < NUM_LEDS; i++)
-      {
-        leds[i] = CRGB((byte)frameIn[(i * 3) + 2], (byte)frameIn[(i * 3) + 1], (byte)frameIn[(i * 3)]);
-      }
+      Serial.readBytes((char*)leds, NUM_LEDS * 3);
       FastLED.show();
       break;
 

@@ -33,6 +33,7 @@ namespace LED_Matrix_Control_2
 
         void LoadStillFromDisk()
         {
+            SetControlMode("still");
             animationGroup.Enabled = false; //disable animation control
             im.LoadStillFromDisk(OpenImageFile.FileName); //load image with image processor
             im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate the bitmaps for the preivew picturebox
@@ -55,6 +56,7 @@ namespace LED_Matrix_Control_2
 
         public void LoadGifFromDisk()
         {
+            SetControlMode("gif");
             animationGroup.Enabled = true; //enable animation controls
             StopAnimationTick(); //stop previous animation
 
@@ -85,13 +87,11 @@ namespace LED_Matrix_Control_2
         void SetupScreenCapture()
         {
             //to do: add support for multiple monitors
-
+            SetControlMode("screen");
             im.CaptureScreen(Screen.AllScreens[0].Bounds); //capture snapshot of the whole screen
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate a preview bitmap of the entire screen
 
             SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of screen
             CaptureScreen(); //capture screen with set scale dimensions
-            UpdateImagePreview(); //update preview with scaled bitmap
         }
 
 
@@ -102,13 +102,18 @@ namespace LED_Matrix_Control_2
             Rectangle screenDimensionSize = new Rectangle(0, 0, screenCaptureArea.Width, screenCaptureArea.Height); //set area of screen to capture
 
             im.CaptureScreen(screenCaptureArea); //capture snapshot of screen and store it in image processor's varaibles
-            im.GeneratePreviewBitmaps(imagePictureBox.Width, imagePictureBox.Height); //generate a preview bitmap of selected area of screen
-
             im.DownSampleImages(pixlx, pixly, selectMode(), screenDimensionSize); //load screen snapshot into image processor's imageFrames array
 
             sm.SendFrame(im.imageFrames[0]); //send frame data
-            pb.FrameToBoxes(im.imageFrames[0]); //update matrix preview
-            UpdateImagePreview(); //update preview picturebox
+            if (showPreview)
+            {
+                pb.FrameToBoxes(im.imageFrames[0]); //update matrix preview
+                imagePictureBox.Image = im.workingBitmaps[0]; //set preview picture box to screen preview
+            }
+            else
+            {
+                imagePictureBox.Image = null;
+            }
         }
 
         //update the scale controls to fit whatever image is loaded
@@ -129,7 +134,7 @@ namespace LED_Matrix_Control_2
         private void animTimer_Tick(object sender, EventArgs e)
         {
             animIndex = animIndex < 0 ? 0 : animIndex; //prevent animation index from being less than 0
-            animIndex = animIndex >= im.imageFrames.Length ? im.imageFrames.Length-1 : animIndex; //prevent animation index from being bigger than one less than the frame array length
+            animIndex = animIndex >= im.imageFrames.Length ? im.imageFrames.Length - 1 : animIndex; //prevent animation index from being bigger than one less than the frame array length
             sm.SendFrame(im.imageFrames[animIndex]); //send frame at animation index;
 
             //update display at animation index;
@@ -138,7 +143,7 @@ namespace LED_Matrix_Control_2
                 pb.FrameToBoxes(im.imageFrames[animIndex]);
                 UpdateImagePreview();
             }
-            
+
             switch (animationMode) //switch based on selected mode
             {
                 //play through each frame forwards
@@ -285,7 +290,7 @@ namespace LED_Matrix_Control_2
 
         void UpdateImagePreview()
         {
-            if (im.ImgType != ImageProcessor.imType.screen && showPreview && im.anyImageLoaded) //if image is loaded and show preview is true and the screen cap is not lo
+            if (im.ImgType != ImageProcessor.imType.screen && showPreview && im.anyImageLoaded) //if image is loaded and show preview is true and the screen cap is not loaded
             {
                 Bitmap paintedBitmap = im.previewBitmaps[animIndex].Clone(new Rectangle(0, 0, im.previewBitmaps[0].Width, im.previewBitmaps[0].Height), PixelFormat.DontCare);
                 using (Graphics g = Graphics.FromImage(paintedBitmap))
@@ -299,8 +304,7 @@ namespace LED_Matrix_Control_2
                 }
                 imagePictureBox.Image = paintedBitmap;
             }
-            else
-                imagePictureBox.Image = im.previewBitmaps[0];
+
         }
 
 
@@ -311,12 +315,27 @@ namespace LED_Matrix_Control_2
             if (im.ImgType == ImageProcessor.imType.still)
                 LoadStillFromDisk();
             if (im.ImgType == ImageProcessor.imType.gif)
-            {
                 LoadGifFromDisk();
-            }
             if (im.ImgType == ImageProcessor.imType.screen)
                 SetupScreenCapture();
 
+        }
+
+        void SetControlMode(string mode)
+        {
+            switch (mode)
+            {
+                case "screen":
+                    StopAnimationTick();
+                    animationGroup.Enabled = false;
+                    break;
+                case "gif":
+                    animationGroup.Enabled = true;
+                    break;
+                case "still":
+                    animationGroup.Enabled = false;
+                    break;
+            }
         }
 
 

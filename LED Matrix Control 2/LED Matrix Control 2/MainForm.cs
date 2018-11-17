@@ -15,7 +15,7 @@ namespace LED_Matrix_Control_2
         //create variables for each class
         BitmapProcessor bp;
         public SerialManager sm;
-        public PictureBoxBuilder pb;
+        public PictureBoxManager pb;
         ImageProcessor im;
         StatusLabelManager slm;
         DrawManager dm;
@@ -44,7 +44,7 @@ namespace LED_Matrix_Control_2
             //create class objects
             bp = new BitmapProcessor();
             sm = new SerialManager();
-            pb = new PictureBoxBuilder(pixlx, pixly);
+            pb = new PictureBoxManager(pixlx, pixly);
             im = new ImageProcessor();
             slm = new StatusLabelManager();
             dm = new DrawManager();
@@ -52,7 +52,7 @@ namespace LED_Matrix_Control_2
 
             PortListToComboBox(); //list COM Ports
 
-            pb.CreateBoxes(pixlx, pixly); //create matrix pictureboxes with loaded width and height
+            //pb.CreateBoxes(pixlx, pixly); //create matrix pictureboxes with loaded width and height
 
             InterpolationModeDropDown1.Text = InterpolationModeDropDown1.Items[0].ToString(); //setup interpolationMode
             animationPlayMode.Text = animationPlayMode.Items[0].ToString(); //setup animation mode
@@ -169,6 +169,10 @@ namespace LED_Matrix_Control_2
                         //   matrixContainer.Cursor = ;
                     Debug.WriteLine("test for github");
                     pb.ChangeDrawEnable(true);
+                    animTimer.Stop();
+                    StopAnimationTick();
+                    sm.ClearFrame();
+                    pb.ClearFrame();
                     break;
             }
         }
@@ -220,8 +224,13 @@ namespace LED_Matrix_Control_2
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             showPreview = showPreviewCheckBox.Checked;
+            matrixContainer.Visible = showPreview;
+            imagePreviewGroup.Visible = showPreview;
+            if (!showPreview)
+            {
+                pb.ClearFrame();
+            }
         }
-
 
         private void brightnessUD_ValueChanged(object sender, EventArgs e)
         {

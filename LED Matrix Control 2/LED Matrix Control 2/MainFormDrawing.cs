@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace LED_Matrix_Control_2
 {
@@ -36,8 +37,8 @@ namespace LED_Matrix_Control_2
                 DrawObject data = dm.DrawPixel(e);
                 if (data.draw)
                 {
-                        sm.SendPixel(data.x, data.y, data.color);
-                        pb.SendPixel(data.x, data.y, data.color);
+                    sm.SendPixel(data.x, data.y, data.color);
+                    pb.SendPixel(data.x, data.y, data.color);
                 }
             }
         }
@@ -59,6 +60,7 @@ namespace LED_Matrix_Control_2
                 dm.drawColor1 = drawColorPicker.Color;
                 color1Button.BackColor = dm.drawColor1;
                 customButtons[ccIndex].BackColor = dm.drawColor1;
+                UpdateColorInfoLabel(dm.drawColor1);
                 ccIndex++;
                 if (ccIndex == 10)
                     ccIndex = 0;
@@ -70,6 +72,7 @@ namespace LED_Matrix_Control_2
                 dm.drawColor2 = drawColorPicker.Color;
                 color2Button.BackColor = dm.drawColor2;
                 customButtons[ccIndex].BackColor = dm.drawColor2;
+                UpdateColorInfoLabel(dm.drawColor2);
                 ccIndex++;
                 if (ccIndex == 10)
                     ccIndex = 0;
@@ -85,13 +88,25 @@ namespace LED_Matrix_Control_2
             {
                 dm.drawColor1 = b.BackColor;
                 color1Button.BackColor = dm.drawColor1;
+                UpdateColorInfoLabel(dm.drawColor1);
             }
             else if (e.Button == MouseButtons.Right)
             {
                 dm.drawColor2 = b.BackColor;
                 color2Button.BackColor = dm.drawColor2;
+                UpdateColorInfoLabel(dm.drawColor2);
             }
-            Debug.WriteLine(b.BackColor);
+        }
+
+        void UpdateColorInfoLabel(Color col)
+        {
+            colorInfoLabel.Text = "Color Info: R:" + col.R.ToString("000") + ", G:" + col.G.ToString("000") + ", B:" + col.B.ToString("000");
+        }
+
+        private void saveFrameButton_Click(object sender, EventArgs e)
+        {
+
+          //  File.WriteAllBytes("Foo.txt", pb.CreateFrameData());
         }
     }
 }

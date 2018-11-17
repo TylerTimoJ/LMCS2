@@ -83,9 +83,9 @@ namespace LED_Matrix_Control_2
                 int orderIndex = 0;
                 for (int i = 1; i < rawFrameData.Length+1; i += 3)
                 {
-                    data[i] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3] * WhiteBalance[2]);
+                    data[i+2] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3] * WhiteBalance[0]);
                     data[i + 1] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 1] * WhiteBalance[1]);
-                    data[i + 2] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 2] * WhiteBalance[0]);
+                    data[i] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 2] * WhiteBalance[2]);
                     orderIndex++;
                 }
                 connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length+1);
