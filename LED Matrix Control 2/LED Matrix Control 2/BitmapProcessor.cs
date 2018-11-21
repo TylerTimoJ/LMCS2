@@ -28,12 +28,14 @@ namespace LED_Matrix_Control_2
 
         Bitmap CropImage(Bitmap img, Rectangle cropArea)
         {
+            //Bitmap bmp = img.Clone(cropArea, PixelFormat.Format24bppRgb);
+
             Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
             using (Graphics gph = Graphics.FromImage(bmp))
             {
-                
-                gph.DrawImage(img, new Rectangle(0, 0, cropArea.Width, cropArea.Height), cropArea, GraphicsUnit.Pixel);
+               gph.DrawImage(img, new Rectangle(0, 0, cropArea.Width, cropArea.Height), cropArea, GraphicsUnit.Pixel);
             }
+            
             return bmp;
         }
 
@@ -56,7 +58,7 @@ namespace LED_Matrix_Control_2
             Bitmap result = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(result))
             {
-                g.SmoothingMode = SmoothingMode.None;
+                //g.SmoothingMode = SmoothingMode.None;
                 g.InterpolationMode = mode;
                 g.DrawImage(b, 0, 0, width, height);
             }

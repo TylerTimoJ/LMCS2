@@ -33,6 +33,7 @@
             this.matrixContainer = new System.Windows.Forms.Panel();
             this.ModeTabControl = new System.Windows.Forms.TabControl();
             this.tab1Settings = new System.Windows.Forms.TabPage();
+            this.showPreviewCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.loadPixelOrder = new System.Windows.Forms.Button();
@@ -100,7 +101,6 @@
             this.cb2 = new System.Windows.Forms.Button();
             this.cb1 = new System.Windows.Forms.Button();
             this.tab3Image = new System.Windows.Forms.TabPage();
-            this.showPreviewCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.InterpolationModeDropDown1 = new System.Windows.Forms.ComboBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -232,6 +232,19 @@
             this.tab1Settings.Text = "Settings";
             this.tab1Settings.UseVisualStyleBackColor = true;
             // 
+            // showPreviewCheckBox
+            // 
+            this.showPreviewCheckBox.AutoSize = true;
+            this.showPreviewCheckBox.Checked = true;
+            this.showPreviewCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showPreviewCheckBox.Location = new System.Drawing.Point(146, 201);
+            this.showPreviewCheckBox.Name = "showPreviewCheckBox";
+            this.showPreviewCheckBox.Size = new System.Drawing.Size(94, 17);
+            this.showPreviewCheckBox.TabIndex = 8;
+            this.showPreviewCheckBox.Text = "Show Preivew";
+            this.showPreviewCheckBox.UseVisualStyleBackColor = true;
+            this.showPreviewCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // groupBox8
             // 
             this.groupBox8.Controls.Add(this.groupBox9);
@@ -252,9 +265,9 @@
             this.groupBox9.Controls.Add(this.resetPixelOrder);
             this.groupBox9.Controls.Add(this.savePixelOrder);
             this.groupBox9.Controls.Add(this.editPixelOrder);
-            this.groupBox9.Location = new System.Drawing.Point(279, 19);
+            this.groupBox9.Location = new System.Drawing.Point(298, 19);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(87, 148);
+            this.groupBox9.Size = new System.Drawing.Size(140, 148);
             this.groupBox9.TabIndex = 7;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "3. Pixel Order";
@@ -263,7 +276,7 @@
             // 
             this.loadPixelOrder.Location = new System.Drawing.Point(6, 48);
             this.loadPixelOrder.Name = "loadPixelOrder";
-            this.loadPixelOrder.Size = new System.Drawing.Size(75, 23);
+            this.loadPixelOrder.Size = new System.Drawing.Size(128, 23);
             this.loadPixelOrder.TabIndex = 3;
             this.loadPixelOrder.Text = "Load";
             this.loadPixelOrder.UseVisualStyleBackColor = true;
@@ -274,7 +287,7 @@
             this.resetPixelOrder.Enabled = false;
             this.resetPixelOrder.Location = new System.Drawing.Point(6, 106);
             this.resetPixelOrder.Name = "resetPixelOrder";
-            this.resetPixelOrder.Size = new System.Drawing.Size(75, 23);
+            this.resetPixelOrder.Size = new System.Drawing.Size(128, 23);
             this.resetPixelOrder.TabIndex = 2;
             this.resetPixelOrder.Text = "Reset";
             this.resetPixelOrder.UseVisualStyleBackColor = true;
@@ -285,7 +298,7 @@
             this.savePixelOrder.Enabled = false;
             this.savePixelOrder.Location = new System.Drawing.Point(6, 77);
             this.savePixelOrder.Name = "savePixelOrder";
-            this.savePixelOrder.Size = new System.Drawing.Size(75, 23);
+            this.savePixelOrder.Size = new System.Drawing.Size(128, 23);
             this.savePixelOrder.TabIndex = 1;
             this.savePixelOrder.Text = "Save";
             this.savePixelOrder.UseVisualStyleBackColor = true;
@@ -295,7 +308,7 @@
             // 
             this.editPixelOrder.Location = new System.Drawing.Point(6, 19);
             this.editPixelOrder.Name = "editPixelOrder";
-            this.editPixelOrder.Size = new System.Drawing.Size(75, 23);
+            this.editPixelOrder.Size = new System.Drawing.Size(128, 23);
             this.editPixelOrder.TabIndex = 0;
             this.editPixelOrder.Text = "Create New";
             this.editPixelOrder.UseVisualStyleBackColor = true;
@@ -312,7 +325,7 @@
             this.groupBox2.Controls.Add(this.buildBoxes);
             this.groupBox2.Location = new System.Drawing.Point(6, 19);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(121, 117);
+            this.groupBox2.Size = new System.Drawing.Size(140, 117);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "1. Matrix Dimensions";
@@ -349,7 +362,7 @@
             0,
             0});
             this.pixlsYUpDown.Name = "pixlsYUpDown";
-            this.pixlsYUpDown.Size = new System.Drawing.Size(59, 20);
+            this.pixlsYUpDown.Size = new System.Drawing.Size(78, 20);
             this.pixlsYUpDown.TabIndex = 5;
             this.pixlsYUpDown.Value = new decimal(new int[] {
             2,
@@ -371,7 +384,7 @@
             0,
             0});
             this.pixlsXUpDown.Name = "pixlsXUpDown";
-            this.pixlsXUpDown.Size = new System.Drawing.Size(59, 20);
+            this.pixlsXUpDown.Size = new System.Drawing.Size(78, 20);
             this.pixlsXUpDown.TabIndex = 4;
             this.pixlsXUpDown.Value = new decimal(new int[] {
             2,
@@ -383,7 +396,7 @@
             // 
             this.buildBoxes.Location = new System.Drawing.Point(6, 75);
             this.buildBoxes.Name = "buildBoxes";
-            this.buildBoxes.Size = new System.Drawing.Size(109, 23);
+            this.buildBoxes.Size = new System.Drawing.Size(128, 23);
             this.buildBoxes.TabIndex = 3;
             this.buildBoxes.Text = "Set Dimensions";
             this.buildBoxes.UseVisualStyleBackColor = true;
@@ -397,7 +410,7 @@
             this.groupBox1.Controls.Add(this.disconnectFromCOMPort);
             this.groupBox1.Controls.Add(this.portsList);
             this.groupBox1.Controls.Add(this.connectToCOMPort);
-            this.groupBox1.Location = new System.Drawing.Point(133, 19);
+            this.groupBox1.Location = new System.Drawing.Point(152, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(140, 146);
             this.groupBox1.TabIndex = 5;
@@ -1078,25 +1091,12 @@
             this.tab3Image.Text = "Imaging";
             this.tab3Image.UseVisualStyleBackColor = true;
             // 
-            // showPreviewCheckBox
-            // 
-            this.showPreviewCheckBox.AutoSize = true;
-            this.showPreviewCheckBox.Checked = true;
-            this.showPreviewCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showPreviewCheckBox.Location = new System.Drawing.Point(146, 201);
-            this.showPreviewCheckBox.Name = "showPreviewCheckBox";
-            this.showPreviewCheckBox.Size = new System.Drawing.Size(94, 17);
-            this.showPreviewCheckBox.TabIndex = 8;
-            this.showPreviewCheckBox.Text = "Show Preivew";
-            this.showPreviewCheckBox.UseVisualStyleBackColor = true;
-            this.showPreviewCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
             // groupBox7
             // 
             this.groupBox7.AutoSize = true;
             this.groupBox7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox7.Controls.Add(this.InterpolationModeDropDown1);
-            this.groupBox7.Location = new System.Drawing.Point(3, 70);
+            this.groupBox7.Location = new System.Drawing.Point(4, 90);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(122, 56);
             this.groupBox7.TabIndex = 11;
@@ -1187,6 +1187,7 @@
             this.animationGroup.Controls.Add(this.label6);
             this.animationGroup.Enabled = false;
             this.animationGroup.Location = new System.Drawing.Point(131, 3);
+            this.animationGroup.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.animationGroup.Name = "animationGroup";
             this.animationGroup.Size = new System.Drawing.Size(218, 88);
             this.animationGroup.TabIndex = 9;

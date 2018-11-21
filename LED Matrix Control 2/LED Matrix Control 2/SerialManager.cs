@@ -11,6 +11,7 @@ namespace LED_Matrix_Control_2
     public class SerialManager
     {
         public float[] WhiteBalance = new float[] { 1f, 1f, 1f };
+        public float brightness = 1f;
         SerialPort connectedPort;
         public int[] frameByteOrder;
         public int[] pixelByteOrder;
@@ -59,7 +60,7 @@ namespace LED_Matrix_Control_2
 
         private void ConnectedPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-                deviceReady = connectedPort.BaseStream.ReadByte() == 16 ? true : false;
+            deviceReady = connectedPort.BaseStream.ReadByte() == 16 ? true : false;
         }
 
         public void DisconnectCOMPort()
@@ -78,17 +79,17 @@ namespace LED_Matrix_Control_2
             if (PortOK())
             {
                 deviceReady = false;
-                byte[] data = new byte[rawFrameData.Length+1];
+                byte[] data = new byte[rawFrameData.Length + 1];
                 data[0] = 2;
                 int orderIndex = 0;
-                for (int i = 1; i < rawFrameData.Length+1; i += 3)
+                for (int i = 1; i < rawFrameData.Length + 1; i += 3)
                 {
-                    data[i+2] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3] * WhiteBalance[0]);
-                    data[i + 1] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 1] * WhiteBalance[1]);
-                    data[i] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 2] * WhiteBalance[2]);
+                    data[i + 2] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3] * WhiteBalance[0] * brightness);
+                    data[i + 1] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 1] * WhiteBalance[1] * brightness);
+                    data[i] = (byte)(rawFrameData[frameByteOrder[orderIndex] * 3 + 2] * WhiteBalance[2] * brightness);
                     orderIndex++;
                 }
-                connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length+1);
+                connectedPort.BaseStream.WriteAsync(data, 0, rawFrameData.Length + 1);
             }
         }
 
@@ -108,24 +109,24 @@ namespace LED_Matrix_Control_2
                 int rawIndex = (y * w) + x;
                 int orderedIndex = pixelByteOrder[rawIndex];
 
-               // orderedIndex
+                // orderedIndex
                 //int orderedIndex = rawIndex;
 
                 int newX = orderedIndex % w;
                 int newY = orderedIndex / w;
 
 
-                
+
                 pixelData[1] = (byte)newX;
                 pixelData[2] = (byte)newY;
 
-               // pixelData[1] = (byte)x;
-               // pixelData[2] = (byte)y;
+                // pixelData[1] = (byte)x;
+                // pixelData[2] = (byte)y;
 
 
-                pixelData[3] = (byte)(data[0] * WhiteBalance[0]);
-                pixelData[4] = (byte)(data[1] * WhiteBalance[1]);
-                pixelData[5] = (byte)(data[2] * WhiteBalance[2]);
+                pixelData[3] = (byte)(data[0] * WhiteBalance[0] * brightness);
+                pixelData[4] = (byte)(data[1] * WhiteBalance[1] * brightness);
+                pixelData[5] = (byte)(data[2] * WhiteBalance[2] * brightness);
 
 
                 //connectedPort.BaseStream.Write(new byte[] { 0 }, 0, 1);
@@ -142,10 +143,9 @@ namespace LED_Matrix_Control_2
         }
 
 
-        public void UpdateBrightness(byte brightness)
+        public void UpdateBrightness(float b)
         {
-            if (PortOK())
-                connectedPort.BaseStream.WriteAsync(new byte[] { 3, brightness }, 0, 2);
+            brightness = b / 255;
 
         }
 

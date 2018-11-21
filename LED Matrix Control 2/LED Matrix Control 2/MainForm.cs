@@ -27,6 +27,7 @@ namespace LED_Matrix_Control_2
         string selectedInterpMode = "Nearest Neighbor";
         bool showPreview = true;
         Rectangle dimensions;
+        bool pixelOrderLoaded;
 
 
         public MainForm()
@@ -77,6 +78,11 @@ namespace LED_Matrix_Control_2
 
             //reference custom buttons
             customButtons = new Button[10] { ccb1, ccb2, ccb3, ccb4, ccb5, ccb6, ccb7, ccb8, ccb9, ccb10 };
+
+
+            if (pixelOrderLoaded)
+                EnableProgram(true);
+
         }
 
         //connect to which ever COM port is selected in drop down
@@ -173,6 +179,7 @@ namespace LED_Matrix_Control_2
                     StopAnimationTick();
                     sm.ClearFrame();
                     pb.ClearFrame();
+                    dm.ClearFrame();
                     break;
             }
         }
@@ -208,9 +215,11 @@ namespace LED_Matrix_Control_2
                     slm.PixelOrderStatus(true, pixlx, pixly); //update label
                     Properties.Settings.Default.previousPixelOrderFile = path;
                     pb.DoneEditing();
+                    pixelOrderLoaded = true;
                 }
                 else
                 {
+                    pixelOrderLoaded = false;
                     if (firstLoad)
                         slm.PixelOrderStatus(false);
                     else
@@ -231,6 +240,18 @@ namespace LED_Matrix_Control_2
                 pb.ClearFrame();
             }
         }
+
+        public void EnableProgram(bool enable)
+        {
+            TabPage tab;
+            for (int i = 1; i < ModeTabControl.TabCount; i++)
+            {
+                tab = ModeTabControl.TabPages[i];
+                tab.Enabled = enable;
+            }
+        }
+
+
 
         private void brightnessUD_ValueChanged(object sender, EventArgs e)
         {
