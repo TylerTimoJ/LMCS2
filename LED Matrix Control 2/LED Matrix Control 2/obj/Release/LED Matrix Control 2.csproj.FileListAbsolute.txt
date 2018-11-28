@@ -1,0 +1,10 @@
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\bin\Release\LED Matrix Control 2.exe.config
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\bin\Release\LED Matrix Control 2.exe
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\bin\Release\LED Matrix Control 2.pdb
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED Matrix Control 2.csprojAssemblyReference.cache
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED_Matrix_Control_2.MainForm.resources
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED_Matrix_Control_2.Properties.Resources.resources
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED Matrix Control 2.csproj.GenerateResource.cache
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED Matrix Control 2.csproj.CoreCompileInputs.cache
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED Matrix Control 2.exe
+C:\Users\tyler\Documents\LMCS2\LED Matrix Control 2\LED Matrix Control 2\obj\Release\LED Matrix Control 2.pdb

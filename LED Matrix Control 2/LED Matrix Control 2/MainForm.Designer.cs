@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.connectToCOMPort = new System.Windows.Forms.Button();
             this.matrixContainer = new System.Windows.Forms.Panel();
             this.ModeTabControl = new System.Windows.Forms.TabControl();
@@ -1553,6 +1554,7 @@
             this.Controls.Add(this.ModeTabControl);
             this.Controls.Add(this.matrixContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(3);
