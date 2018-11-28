@@ -10,7 +10,6 @@ namespace LED_Matrix_Control_2
 {
     public partial class MainForm : Form
     {
-
         //open image
         private void stillImageSelectButton_Click(object sender, EventArgs e)
         {

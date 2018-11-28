@@ -1546,7 +1546,7 @@
             // 
             // screenCapTimer
             // 
-            this.screenCapTimer.Interval = 15;
+            this.screenCapTimer.Interval = 1;
             this.screenCapTimer.Tick += new System.EventHandler(this.screenCapTimer_Tick);
             // 
             // statusBar

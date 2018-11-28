@@ -30,10 +30,11 @@ namespace LED_Matrix_Control_2
         bool pixelOrderLoaded;
 
 
+
         public MainForm()
         {
             InitializeComponent();
-
+            
         }
 
 
@@ -198,7 +199,7 @@ namespace LED_Matrix_Control_2
 
         void LoadOrderFromDisk(string path, bool firstLoad = false)
         {
-            if (path != "") //if the previous order file is still there, or even exists
+            if (path != "" && File.Exists(path)) //if the previous order file is still there, or even exists
             {
                 string[] orderFromFile = File.ReadAllLines(path); //read file into string array
                 int[] orderArray = Array.ConvertAll(orderFromFile, s => int.Parse(s)); //parse into an integer array

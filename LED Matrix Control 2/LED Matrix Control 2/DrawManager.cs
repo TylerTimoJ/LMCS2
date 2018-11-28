@@ -33,6 +33,7 @@ namespace LED_Matrix_Control_2
             ClearFrame();
         }
 
+
         public void ClearFrame()
         {
             for (int x = 0; x < form.pixlx; x++)
