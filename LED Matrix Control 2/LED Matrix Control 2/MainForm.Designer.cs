@@ -263,12 +263,12 @@
             this.groupBox9.Controls.Add(this.resetPixelOrder);
             this.groupBox9.Controls.Add(this.savePixelOrder);
             this.groupBox9.Controls.Add(this.editPixelOrder);
-            this.groupBox9.Location = new System.Drawing.Point(298, 19);
+            this.groupBox9.Location = new System.Drawing.Point(152, 19);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(140, 148);
             this.groupBox9.TabIndex = 7;
             this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "3. Pixel Order";
+            this.groupBox9.Text = "2. Pixel Order";
             // 
             // loadPixelOrder
             // 
@@ -408,12 +408,12 @@
             this.groupBox1.Controls.Add(this.disconnectFromCOMPort);
             this.groupBox1.Controls.Add(this.portsList);
             this.groupBox1.Controls.Add(this.connectToCOMPort);
-            this.groupBox1.Location = new System.Drawing.Point(152, 19);
+            this.groupBox1.Location = new System.Drawing.Point(298, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(140, 146);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "2. Serial Connection";
+            this.groupBox1.Text = "3. Serial Connection";
             // 
             // refreshCOMPorts
             // 
