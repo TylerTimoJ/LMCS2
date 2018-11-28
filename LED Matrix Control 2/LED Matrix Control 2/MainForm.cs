@@ -91,6 +91,10 @@ namespace LED_Matrix_Control_2
         {
             sm.ConnectToCOMPort(portsList.Text); //try to connect to COM port
             slm.ConnectionStatus(true, portsList.Text); //update label
+            
+            sm.ClearFrame(); //clear
+            pb.ClearFrame();
+            dm.ClearFrame();
         }
 
 
@@ -174,7 +178,7 @@ namespace LED_Matrix_Control_2
 
                 case 1: //drawing
                         //   matrixContainer.Cursor = ;
-                    Debug.WriteLine("test for github");
+                    //Debug.WriteLine("test for github");
                     pb.ChangeDrawEnable(true);
                     animTimer.Stop();
                     StopAnimationTick();

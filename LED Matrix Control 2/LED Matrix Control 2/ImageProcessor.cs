@@ -46,6 +46,8 @@ namespace LED_Matrix_Control_2
             DisposeGarbage();
             previewBitmaps = new Bitmap[1];
             workingBitmaps = new Bitmap[1] { new Bitmap(path) };
+            if (workingBitmaps[0].Width < form.pixlx || workingBitmaps[0].Height < form.pixly)
+                workingBitmaps[0] = new Bitmap(workingBitmaps[0], form.pixlx, form.pixly);
             ImgType = imType.still;
             anyImageLoaded = true;
         }
@@ -78,6 +80,8 @@ namespace LED_Matrix_Control_2
                 {
                     gifImg.SelectActiveFrame(fd, i);
                     workingBitm[i] = (Bitmap)gifImg.Clone();
+                    if (workingBitm[i].Width < form.pixlx || workingBitm[i].Height < form.pixly)
+                        workingBitm[i] = new Bitmap(workingBitm[i], form.pixlx, form.pixly);
                 }
                 data.workingBitmaps = workingBitm;
                 e.Result = data;
@@ -121,17 +125,19 @@ namespace LED_Matrix_Control_2
         {
             if (workingBitmaps != null)
                 foreach (Bitmap b in workingBitmaps)
-                    b.Dispose();
+                    if (b != null)
+                        b.Dispose();
             if (previewBitmaps != null)
                 foreach (Bitmap b in previewBitmaps)
-                    b.Dispose();
+                    if (b != null)
+                        b.Dispose();
         }
 
 
         public void CaptureScreen(Rectangle captureArea)
         {
             DisposeGarbage();
-           // previewBitmaps = new Bitmap[1];
+            // previewBitmaps = new Bitmap[1];
             workingBitmaps = new Bitmap[1];
             workingBitmaps[0] = bp.ScreenToBitmap(captureArea);
             ImgType = imType.screen;

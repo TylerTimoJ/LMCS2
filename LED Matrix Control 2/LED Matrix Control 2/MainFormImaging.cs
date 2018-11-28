@@ -40,6 +40,7 @@ namespace LED_Matrix_Control_2
             SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of loaded image
             RefreshStill(); //send image to display
             UpdateImagePreview(); //update preview with scaled bitmap
+            slm.FrameCount(0); //reset framecount label
         }
 
 
@@ -69,6 +70,7 @@ namespace LED_Matrix_Control_2
             SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of loaded image
             RefreshGif(); //downsample gif bitmaps and load into image processor's imageFrames array
             UpdateImagePreview(); //update preview with scaled bitmap
+            slm.FrameCount(im.imageFrames.Length);
         }
 
 
@@ -88,7 +90,7 @@ namespace LED_Matrix_Control_2
             //to do: add support for multiple monitors
             SetControlMode("screen");
             im.CaptureScreen(Screen.AllScreens[0].Bounds); //capture snapshot of the whole screen
-
+            slm.FrameCount(0); //reset framecount label
             SetScaleControls(); //update scale sliders & numeric updowns to fit the dimensions of screen
             CaptureScreen(); //capture screen with set scale dimensions
         }
@@ -359,12 +361,22 @@ namespace LED_Matrix_Control_2
 
         private void screenCapTimer_Tick(object sender, EventArgs e)
         {
-            CaptureScreen();
+            try
+            {
+                CaptureScreen();
+            }
+            catch (Exception exception)
+            {
+                screenCapTimer.Stop();
+                MessageBox.Show(exception.Message);
+
+            }
         }
 
 
         private void startScreenCap_Click(object sender, EventArgs e)
         {
+            stopScreenCap.Enabled = true;
             SetupScreenCapture();
             screenCapTimer.Start();
         }
@@ -382,7 +394,12 @@ namespace LED_Matrix_Control_2
 
         private void stopScreenCap_Click(object sender, EventArgs e)
         {
-            screenCapTimer.Stop();
+            if (screenCapTimer.Enabled)
+            {
+                screenCapTimer.Stop();
+                Button b = (Button)sender;
+                b.Enabled = false;
+            }
         }
 
 

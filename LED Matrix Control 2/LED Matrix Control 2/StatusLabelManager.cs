@@ -14,6 +14,7 @@ namespace LED_Matrix_Control_2
         string statusLabel;
         string s_port = "Disconnected";
         string s_pixelOrder = "No Pixel Order";
+        string s_frameCount = "";
 
 
 
@@ -51,12 +52,30 @@ namespace LED_Matrix_Control_2
         }
 
 
+        public void FrameCount(int frameCount)
+        {
+            if(frameCount > 0)
+            {
+                s_frameCount = "Frames Loaded: ";
+                s_frameCount += frameCount.ToString();
+            }
+            else
+            {
+                s_frameCount = "";
+            }
+            PushLabel();
+        }
+
+
+
         void PushLabel()
         {
             statusLabel = "";
             statusLabel += s_port;
             statusLabel += ",  ";
             statusLabel += s_pixelOrder;
+            statusLabel += ",  ";
+            statusLabel += s_frameCount;
 
             form.statusBar.Text = statusLabel;
         }

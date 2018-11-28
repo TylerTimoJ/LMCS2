@@ -61,7 +61,6 @@
             this.redWB = new System.Windows.Forms.NumericUpDown();
             this.tab2Draw = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.saveDrawFrameButton = new System.Windows.Forms.Button();
             this.colorInfoLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
@@ -137,7 +136,6 @@
             this.imagePictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.imageSelectButton = new System.Windows.Forms.Button();
-            this.tab4Audio = new System.Windows.Forms.TabPage();
             this.OpenImageFile = new System.Windows.Forms.OpenFileDialog();
             this.animTimer = new System.Windows.Forms.Timer(this.components);
             this.screenCapTimer = new System.Windows.Forms.Timer(this.components);
@@ -209,7 +207,6 @@
             this.ModeTabControl.Controls.Add(this.tab1Settings);
             this.ModeTabControl.Controls.Add(this.tab2Draw);
             this.ModeTabControl.Controls.Add(this.tab3Image);
-            this.ModeTabControl.Controls.Add(this.tab4Audio);
             this.ModeTabControl.Location = new System.Drawing.Point(3, 3);
             this.ModeTabControl.Margin = new System.Windows.Forms.Padding(0);
             this.ModeTabControl.Name = "ModeTabControl";
@@ -589,27 +586,16 @@
             // 
             this.groupBox10.AutoSize = true;
             this.groupBox10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox10.Controls.Add(this.saveDrawFrameButton);
             this.groupBox10.Controls.Add(this.colorInfoLabel);
             this.groupBox10.Controls.Add(this.panel2);
             this.groupBox10.Controls.Add(this.clearButton1);
             this.groupBox10.Controls.Add(this.panel1);
             this.groupBox10.Location = new System.Drawing.Point(7, 7);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(374, 181);
+            this.groupBox10.Size = new System.Drawing.Size(374, 152);
             this.groupBox10.TabIndex = 0;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Pen Settings";
-            // 
-            // saveDrawFrameButton
-            // 
-            this.saveDrawFrameButton.Location = new System.Drawing.Point(5, 139);
-            this.saveDrawFrameButton.Name = "saveDrawFrameButton";
-            this.saveDrawFrameButton.Size = new System.Drawing.Size(89, 23);
-            this.saveDrawFrameButton.TabIndex = 11;
-            this.saveDrawFrameButton.Text = "Save Frame";
-            this.saveDrawFrameButton.UseVisualStyleBackColor = true;
-            this.saveDrawFrameButton.Click += new System.EventHandler(this.saveFrameButton_Click);
             // 
             // colorInfoLabel
             // 
@@ -1096,7 +1082,7 @@
             this.groupBox7.AutoSize = true;
             this.groupBox7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox7.Controls.Add(this.InterpolationModeDropDown1);
-            this.groupBox7.Location = new System.Drawing.Point(4, 90);
+            this.groupBox7.Location = new System.Drawing.Point(3, 70);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(122, 56);
             this.groupBox7.TabIndex = 11;
@@ -1137,6 +1123,7 @@
             // 
             // stopScreenCap
             // 
+            this.stopScreenCap.Enabled = false;
             this.stopScreenCap.Location = new System.Drawing.Point(6, 48);
             this.stopScreenCap.Name = "stopScreenCap";
             this.stopScreenCap.Size = new System.Drawing.Size(128, 23);
@@ -1291,7 +1278,7 @@
             this.scaleSettingGroup.Controls.Add(this.label3);
             this.scaleSettingGroup.Controls.Add(this.label2);
             this.scaleSettingGroup.Enabled = false;
-            this.scaleSettingGroup.Location = new System.Drawing.Point(4, 152);
+            this.scaleSettingGroup.Location = new System.Drawing.Point(3, 132);
             this.scaleSettingGroup.Name = "scaleSettingGroup";
             this.scaleSettingGroup.Size = new System.Drawing.Size(491, 137);
             this.scaleSettingGroup.TabIndex = 8;
@@ -1483,12 +1470,11 @@
             // 
             // imagePreviewGroup
             // 
-            this.imagePreviewGroup.AutoSize = true;
             this.imagePreviewGroup.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.imagePreviewGroup.Controls.Add(this.imagePictureBox);
-            this.imagePreviewGroup.Location = new System.Drawing.Point(4, 295);
+            this.imagePreviewGroup.Location = new System.Drawing.Point(4, 275);
             this.imagePreviewGroup.Name = "imagePreviewGroup";
-            this.imagePreviewGroup.Size = new System.Drawing.Size(497, 338);
+            this.imagePreviewGroup.Size = new System.Drawing.Size(497, 345);
             this.imagePreviewGroup.TabIndex = 2;
             this.imagePreviewGroup.TabStop = false;
             this.imagePreviewGroup.Text = "Image Preview";
@@ -1498,7 +1484,7 @@
             this.imagePictureBox.Location = new System.Drawing.Point(4, 19);
             this.imagePictureBox.Margin = new System.Windows.Forms.Padding(1, 3, 1, 1);
             this.imagePictureBox.Name = "imagePictureBox";
-            this.imagePictureBox.Size = new System.Drawing.Size(489, 302);
+            this.imagePictureBox.Size = new System.Drawing.Size(489, 322);
             this.imagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imagePictureBox.TabIndex = 1;
             this.imagePictureBox.TabStop = false;
@@ -1524,15 +1510,6 @@
             this.imageSelectButton.Text = "Select Image / Gif";
             this.imageSelectButton.UseVisualStyleBackColor = true;
             this.imageSelectButton.Click += new System.EventHandler(this.stillImageSelectButton_Click);
-            // 
-            // tab4Audio
-            // 
-            this.tab4Audio.Location = new System.Drawing.Point(4, 22);
-            this.tab4Audio.Name = "tab4Audio";
-            this.tab4Audio.Size = new System.Drawing.Size(504, 623);
-            this.tab4Audio.TabIndex = 3;
-            this.tab4Audio.Text = "Audio";
-            this.tab4Audio.UseVisualStyleBackColor = true;
             // 
             // OpenImageFile
             // 
@@ -1694,7 +1671,6 @@
         private System.Windows.Forms.ComboBox screenSelection;
         public System.Windows.Forms.Label statusBar;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.TabPage tab4Audio;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button editPixelOrder;
@@ -1746,7 +1722,6 @@
         private System.Windows.Forms.Button cb6;
         private System.Windows.Forms.CheckBox showPreviewCheckBox;
         private System.Windows.Forms.Label colorInfoLabel;
-        private System.Windows.Forms.Button saveDrawFrameButton;
     }
 }
 
