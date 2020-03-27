@@ -1,3 +1,9 @@
+
+PLEASE DO NOT USE THIS SOFTWARE.
+USE THE NEWER SOFTWARE "LMCSHD"
+https://github.com/TylerTimoJ/LMCSHD
+
+
 # LMCS2
 LED Matrix Control Software 2
 
